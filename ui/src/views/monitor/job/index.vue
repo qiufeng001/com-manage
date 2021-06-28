@@ -317,10 +317,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_job_group").then(response => {
+    this.getDicts("t_job_group").then(response => {
       this.jobGroupOptions = response.data;
     });
-    this.getDicts("sys_job_status").then(response => {
+    this.getDicts("t_job_status").then(response => {
       this.statusOptions = response.data;
     });
   },

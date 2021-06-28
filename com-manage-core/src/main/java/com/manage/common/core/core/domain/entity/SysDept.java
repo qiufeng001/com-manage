@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 部门表 sys_dept
+ * 部门表 t_dept
  *
  * @author manage
  */

@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 定时任务调度表 sys_job
+ * 定时任务调度表 t_job
  *
  * @author zhong.h
  */

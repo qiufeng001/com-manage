@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * 角色表 sys_role
+ * 角色表 t_role
  *
  * @author manage
  */

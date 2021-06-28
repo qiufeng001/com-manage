@@ -22,7 +22,7 @@ import java.util.TimerTask;
  * @author zhong.h
  */
 public class AsyncFactory {
-    private static final Logger sys_user_logger = LoggerFactory.getLogger("sys-user");
+    private static final Logger t_user_logger = LoggerFactory.getLogger("sys-user");
 
     /**
      * 记录登录信息
@@ -48,7 +48,7 @@ public class AsyncFactory {
                 s.append(LogUtils.getBlock(status));
                 s.append(LogUtils.getBlock(message));
                 // 打印信息到日志
-                sys_user_logger.info(s.toString(), args);
+                t_user_logger.info(s.toString(), args);
                 // 获取客户端操作系统
                 String os = userAgent.getOperatingSystem().getName();
                 // 获取客户端浏览器

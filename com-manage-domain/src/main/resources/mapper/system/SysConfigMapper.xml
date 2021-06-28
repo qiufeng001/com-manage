@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <sql id="selectConfigVo">
         select config_id, config_name, config_key, config_value, config_type, create_by, create_time, update_by, update_time, remark 
-		from sys_config
+		from t_config
     </sql>
     
     <!-- 查询条件 -->
@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <insert id="insertConfig" parameterType="SysConfig">
-        insert into sys_config (
+        insert into t_config (
 			<if test="configName != null and configName != '' ">config_name,</if>
 			<if test="configKey != null and configKey != '' ">config_key,</if>
 			<if test="configValue != null and configValue != '' ">config_value,</if>
@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 	 
     <update id="updateConfig" parameterType="SysConfig">
-        update sys_config 
+        update t_config
         <set>
             <if test="configName != null and configName != ''">config_name = #{configName},</if>
             <if test="configKey != null and configKey != ''">config_key = #{configKey},</if>
@@ -99,11 +99,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 	
     <delete id="deleteConfigById" parameterType="Long">
-        delete from sys_config where config_id = #{configId}
+        delete from t_config where config_id = #{configId}
     </delete>
     
     <delete id="deleteConfigByIds" parameterType="Long">
-        delete from sys_config where config_id in 
+        delete from t_config where config_id in
         <foreach item="configId" collection="array" open="(" separator="," close=")">
         	#{configId}
         </foreach>

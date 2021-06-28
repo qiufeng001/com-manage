@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Date;
 
 /**
- * 定时任务调度日志表 sys_job_log
+ * 定时任务调度日志表 t_job_log
  *
  * @author zhong.h
  */

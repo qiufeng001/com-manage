@@ -133,7 +133,7 @@ public class DictUtils {
      * 清空字典缓存
      */
     public static void clearDictCache() {
-        Collection<String> keys = SpringUtils.getBean(RedisCache.class).keys(Constants.SYS_DICT_KEY + "*");
+        Collection<String> keys = SpringUtils.getBean(RedisCache.class).keys(Constants.DICT_KEY + "*");
         SpringUtils.getBean(RedisCache.class).deleteObject(keys);
     }
 
@@ -144,6 +144,6 @@ public class DictUtils {
      * @return 缓存键key
      */
     public static String getCacheKey(String configKey) {
-        return Constants.SYS_DICT_KEY + configKey;
+        return Constants.DICT_KEY + configKey;
     }
 }

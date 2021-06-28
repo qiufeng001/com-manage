@@ -228,10 +228,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_notice_status").then(response => {
+    this.getDicts("t_notice_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("sys_notice_type").then(response => {
+    this.getDicts("t_notice_type").then(response => {
       this.typeOptions = response.data;
     });
   },

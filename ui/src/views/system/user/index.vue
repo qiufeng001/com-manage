@@ -450,10 +450,10 @@ export default {
   created() {
     this.getList();
     this.getTreeselect();
-    this.getDicts("sys_normal_disable").then(response => {
+    this.getDicts("t_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("sys_user_sex").then(response => {
+    this.getDicts("t_user_sex").then(response => {
       this.sexOptions = response.data;
     });
     this.getConfigKey("sys.user.initPassword").then(response => {

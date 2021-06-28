@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * 岗位表 sys_post
+ * 岗位表 t_post
  *
  * @author zhong.h
  */

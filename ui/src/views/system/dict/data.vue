@@ -215,7 +215,7 @@ export default {
     const dictId = this.$route.params && this.$route.params.dictId;
     this.getType(dictId);
     this.getTypeList();
-    this.getDicts("sys_normal_disable").then(response => {
+    this.getDicts("t_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
   },

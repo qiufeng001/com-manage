@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用户对象 sys_user
+ * 用户对象 t_user
  *
  * @author manage
  */

@@ -229,7 +229,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_yes_no").then(response => {
+    this.getDicts("t_yes_no").then(response => {
       this.typeOptions = response.data;
     });
   },

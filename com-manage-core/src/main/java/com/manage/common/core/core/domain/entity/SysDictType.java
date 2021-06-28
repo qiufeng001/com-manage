@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * 字典类型表 sys_dict_type
+ * 字典类型表 t_dict_type
  *
  * @author manage
  */

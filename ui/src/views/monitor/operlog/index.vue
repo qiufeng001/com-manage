@@ -225,10 +225,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_oper_type").then(response => {
+    this.getDicts("t_oper_type").then(response => {
       this.typeOptions = response.data;
     });
-    this.getDicts("sys_common_status").then(response => {
+    this.getDicts("t_common_status").then(response => {
       this.statusOptions = response.data;
     });
   },

@@ -114,12 +114,12 @@ public class Constants {
     /**
      * 参数管理 cache key
      */
-    public static final String SYS_CONFIG_KEY = "sys_config:";
+    public static final String CONFIG_KEY = "t_config:";
 
     /**
      * 字典管理 cache key
      */
-    public static final String SYS_DICT_KEY = "sys_dict:";
+    public static final String DICT_KEY = "t_dict:";
 
     /**
      * 资源映射路径 前缀

@@ -135,7 +135,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
         }
         int count = configMapper.deleteConfigByIds(configIds);
         if (count > 0) {
-            Collection<String> keys = redisCache.keys(Constants.SYS_CONFIG_KEY + "*");
+            Collection<String> keys = redisCache.keys(Constants.CONFIG_KEY + "*");
             redisCache.deleteObject(keys);
         }
         return count;
@@ -146,7 +146,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
      */
     @Override
     public void clearCache() {
-        Collection<String> keys = redisCache.keys(Constants.SYS_CONFIG_KEY + "*");
+        Collection<String> keys = redisCache.keys(Constants.CONFIG_KEY + "*");
         redisCache.deleteObject(keys);
     }
 
@@ -173,6 +173,6 @@ public class SysConfigServiceImpl implements ISysConfigService {
      * @return 缓存键key
      */
     private String getCacheKey(String configKey) {
-        return Constants.SYS_CONFIG_KEY + configKey;
+        return Constants.CONFIG_KEY + configKey;
     }
 }

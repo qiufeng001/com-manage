@@ -62,16 +62,16 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" 
-            type="text" 
-            icon="el-icon-edit" 
+          <el-button size="mini"
+            type="text"
+            icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:menu:edit']"
           >修改</el-button>
-          <el-button 
-            size="mini" 
-            type="text" 
-            icon="el-icon-plus" 
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-plus"
             @click="handleAdd(scope.row)"
             v-hasPermi="['system:menu:add']"
           >新增</el-button>
@@ -255,10 +255,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_show_hide").then(response => {
+    this.getDicts("t_show_hide").then(response => {
       this.visibleOptions = response.data;
     });
-    this.getDicts("sys_normal_disable").then(response => {
+    this.getDicts("t_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
   },

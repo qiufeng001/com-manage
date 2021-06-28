@@ -7,7 +7,7 @@ import com.manage.common.core.core.domain.BaseEntity;
 import java.util.Date;
 
 /**
- * 系统访问记录表 sys_logininfor
+ * 系统访问记录表 t_logininfor
  *
  * @author zhong.h
  */

@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <sql id="selectNoticeVo">
         select notice_id, notice_title, notice_type, cast(notice_content as char) as notice_content, status, create_by, create_time, update_by, update_time, remark 
-		from sys_notice
+		from t_notice
     </sql>
     
     <select id="selectNoticeById" parameterType="Long" resultMap="SysNoticeResult">
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <insert id="insertNotice" parameterType="SysNotice">
-        insert into sys_notice (
+        insert into t_notice (
 			<if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
 			<if test="noticeType != null and noticeType != '' ">notice_type, </if>
 			<if test="noticeContent != null and noticeContent != '' ">notice_content, </if>
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 	 
     <update id="updateNotice" parameterType="SysNotice">
-        update sys_notice 
+        update t_notice
         <set>
             <if test="noticeTitle != null and noticeTitle != ''">notice_title = #{noticeTitle}, </if>
             <if test="noticeType != null and noticeType != ''">notice_type = #{noticeType}, </if>
@@ -76,11 +76,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 	
     <delete id="deleteNoticeById" parameterType="Long">
-        delete from sys_notice where notice_id = #{noticeId}
+        delete from t_notice where notice_id = #{noticeId}
     </delete>
     
     <delete id="deleteNoticeByIds" parameterType="Long">
-        delete from sys_notice where notice_id in 
+        delete from t_notice where notice_id in
         <foreach item="noticeId" collection="array" open="(" separator="," close=")">
             #{noticeId}
         </foreach>

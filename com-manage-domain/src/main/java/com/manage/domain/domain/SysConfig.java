@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * 参数配置表 sys_config
+ * 参数配置表 t_config
  *
  * @author zhong.h
  */

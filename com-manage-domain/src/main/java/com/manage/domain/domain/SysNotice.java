@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * 通知公告表 sys_notice
+ * 通知公告表 t_notice
  *
  * @author zhong.h
  */

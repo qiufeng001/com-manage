@@ -31,7 +31,7 @@ public @interface Excel
     public String dateFormat() default "";
 
     /**
-     * 如果是字典类型，请设置字典的type值 (如: sys_user_sex)
+     * 如果是字典类型，请设置字典的type值 (如: t_user_sex)
      */
     public String dictType() default "";
 
