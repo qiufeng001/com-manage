@@ -40,6 +40,7 @@
         <jwt.version>0.9.1</jwt.version>
         <activiti.version>6.0.0</activiti.version>
         <lombok.version>1.18.4</lombok.version>
+        <devtools.version>2.5.2</devtools.version>
     </properties>
 
     <!-- 依赖声明 -->

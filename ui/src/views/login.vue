@@ -33,10 +33,6 @@
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
-      <h4 class="text-danger" style="text-align: center;">请假业务 | 示例Demo 测试账号👇</h4>
-      <h5 class="text-danger" style="text-align: center;">普通员工：chengxy / 123456</h5>
-      <h5 class="text-danger" style="text-align: center;">部门领导 | 机电科电管员：axianlu / 123456</h5>
-      <h5 class="text-danger" style="text-align: center;">人事 | 供电管理口领导：rensm / 123456</h5>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"

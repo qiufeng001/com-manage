@@ -11,6 +11,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 import permission from './directive/permission'
+import eCharts from "vue-echarts";
+
 
 import './assets/icons' // icon
 import './permission' // permission control
@@ -50,6 +52,7 @@ Vue.prototype.msgInfo = function (msg) {
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
+Vue.component('v-chart', eCharts)
 
 Vue.use(permission)
 Vue.use(hljs.vuePlugin);
