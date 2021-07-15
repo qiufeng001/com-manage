@@ -2,6 +2,7 @@ package com.manage.generator.mapper;
 
 
 import com.manage.generator.domain.GenTable;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  *
  * @author zhong.h
  */
+@Mapper
 public interface GenTableMapper {
     /**
      * 查询业务列表

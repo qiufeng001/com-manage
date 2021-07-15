@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manage.domain.mapper.TShopMapper">
+    
+    <resultMap type="TShop" id="TShopResult">
+        <result property="id"    column="id"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="headId"    column="head_id"    />
+        <result property="headName"    column="head_name"    />
+        <result property="contactPhoneNumber"    column="contact_phone_number"    />
+        <result property="address"    column="address"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTShopVo">
+        select id, shop_name, head_id, head_name, contact_phone_number, address, create_by, update_by, create_time, update_time, remark from t_shop
+    </sql>
+
+    <select id="selectTShopList" parameterType="TShop" resultMap="TShopResult">
+        <include refid="selectTShopVo"/>
+        <where>  
+            <if test="shopName != null  and shopName != ''"> and shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="headId != null "> and head_id = #{headId}</if>
+            <if test="headName != null  and headName != ''"> and head_name like concat('%', #{headName}, '%')</if>
+            <if test="contactPhoneNumber != null  and contactPhoneNumber != ''"> and contact_phone_number = #{contactPhoneNumber}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+        </where>
+    </select>
+    
+    <select id="selectTShopById" parameterType="Long" resultMap="TShopResult">
+        <include refid="selectTShopVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTShop" parameterType="TShop">
+        insert into t_shop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="shopName != null and shopName != ''">shop_name,</if>
+            <if test="headId != null">head_id,</if>
+            <if test="headName != null and headName != ''">head_name,</if>
+            <if test="contactPhoneNumber != null and contactPhoneNumber != ''">contact_phone_number,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="shopName != null and shopName != ''">#{shopName},</if>
+            <if test="headId != null">#{headId},</if>
+            <if test="headName != null and headName != ''">#{headName},</if>
+            <if test="contactPhoneNumber != null and contactPhoneNumber != ''">#{contactPhoneNumber},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTShop" parameterType="TShop">
+        update t_shop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopName != null and shopName != ''">shop_name = #{shopName},</if>
+            <if test="headId != null">head_id = #{headId},</if>
+            <if test="headName != null and headName != ''">head_name = #{headName},</if>
+            <if test="contactPhoneNumber != null and contactPhoneNumber != ''">contact_phone_number = #{contactPhoneNumber},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTShopById" parameterType="Long">
+        delete from t_shop where id = #{id}
+    </delete>
+
+    <delete id="deleteTShopByIds" parameterType="String">
+        delete from t_shop where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
