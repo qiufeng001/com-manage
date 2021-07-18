@@ -3,9 +3,10 @@ package com.manage.web.controller.system;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.annotation.RepeatSubmit;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.poi.ExcelUtil;
@@ -26,8 +27,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/system/config")
 public class SysConfigController extends BaseController {
+
     @Autowired
     private ISysConfigService configService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 获取参数配置列表

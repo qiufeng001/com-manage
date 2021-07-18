@@ -2,11 +2,12 @@ package com.manage.web.controller.monitor;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.Constants;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.model.LoginUser;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.redis.RedisCache;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.StringUtils;
 import com.manage.domain.domain.SysUserOnline;
@@ -33,6 +34,11 @@ public class SysUserOnlineController extends BaseController {
 
     @Autowired
     private RedisCache redisCache;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     @PreAuthorize("@ss.hasPermi('monitor:online:list')")
     @GetMapping("/list")

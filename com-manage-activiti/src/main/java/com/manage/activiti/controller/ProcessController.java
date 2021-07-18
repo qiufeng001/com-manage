@@ -5,9 +5,10 @@ import com.manage.activiti.config.WorkflowConstants;
 import com.manage.activiti.domain.HistoricActivity;
 import com.manage.activiti.domain.TaskVo;
 import com.manage.activiti.service.IProcessService;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.StringUtils;
 import lombok.AllArgsConstructor;
@@ -58,6 +59,11 @@ public class ProcessController extends BaseController {
     private IProcessService processService;
     @Autowired
     private RuntimeService runtimeService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 审批历史列表

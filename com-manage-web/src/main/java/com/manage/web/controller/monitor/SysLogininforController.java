@@ -1,9 +1,10 @@
 package com.manage.web.controller.monitor;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.poi.ExcelUtil;
 import com.manage.domain.domain.SysLogininfor;
@@ -24,6 +25,11 @@ import java.util.List;
 public class SysLogininforController extends BaseController {
     @Autowired
     private ISysLogininforService logininforService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")
     @GetMapping("/list")

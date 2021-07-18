@@ -78,6 +78,7 @@
 
 export default {
   name: "index",
+
   methods: {
     goTarget(href) {
       window.open(href, "_blank");

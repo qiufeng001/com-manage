@@ -1,9 +1,10 @@
 package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.domain.domain.SysNotice;
@@ -25,6 +26,11 @@ import java.util.List;
 public class SysNoticeController extends BaseController {
     @Autowired
     private ISysNoticeService noticeService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 获取通知公告列表

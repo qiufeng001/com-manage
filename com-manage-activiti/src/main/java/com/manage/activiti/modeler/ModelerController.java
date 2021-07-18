@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.pagehelper.Page;
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.PageDomain;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.page.TableSupport;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import lombok.AllArgsConstructor;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
@@ -55,6 +56,11 @@ public class ModelerController extends BaseController {
 
     @Autowired
     private RepositoryService repositoryService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 模型列表
@@ -124,7 +130,7 @@ public class ModelerController extends BaseController {
 
             return new AjaxResult(200, "创建模型成功", newModel.getId());
         } catch (Exception e) {
-            logger.error("创建模型失败：", e);
+            LOGGER.error("创建模型失败：", e);
         }
         return error();
     }

@@ -1,9 +1,10 @@
 package com.manage.quartz.controller;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.poi.ExcelUtil;
 import com.manage.quartz.domain.SysJobLog;
@@ -24,6 +25,11 @@ import java.util.List;
 public class SysJobLogController extends BaseController {
     @Autowired
     private ISysJobLogService jobLogService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 查询定时任务调度日志列表

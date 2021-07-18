@@ -1,9 +1,10 @@
 package com.manage.quartz.controller;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.exception.job.TaskException;
 import com.manage.common.core.utils.SecurityUtils;
@@ -28,6 +29,11 @@ import java.util.List;
 public class SysJobController extends BaseController {
     @Autowired
     private ISysJobService jobService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 查询定时任务列表
@@ -118,8 +124,13 @@ public class SysJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('monitor:job:remove')")
     @Log(title = "定时任务", businessType = BusinessType.DELETE)
     @DeleteMapping("/{jobIds}")
-    public AjaxResult remove(@PathVariable Long[] jobIds) throws SchedulerException, TaskException {
-        jobService.deleteJobByIds(jobIds);
+    public AjaxResult remove(@PathVariable Long[] jobIds) {
+        try {
+            jobService.deleteJobByIds(jobIds);
+        }catch (SchedulerException e) {
+            return AjaxResult.error();
+        }
+
         return AjaxResult.success();
     }
 }

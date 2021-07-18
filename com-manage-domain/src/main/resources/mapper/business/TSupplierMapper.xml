@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manage.business.mapper.TSupplierMapper">
+    
+    <resultMap type="TSupplier" id="TSupplierResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="contactPeople"    column="contact_people"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+    </resultMap>
+
+    <sql id="selectTSupplierVo">
+        select id, name, contact_people, phone, address from t_supplier
+    </sql>
+
+    <select id="selectTSupplierList" parameterType="TSupplier" resultMap="TSupplierResult">
+        <include refid="selectTSupplierVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="contactPeople != null  and contactPeople != ''"> and contact_people = #{contactPeople}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+        </where>
+    </select>
+    
+    <select id="selectTSupplierById" parameterType="Long" resultMap="TSupplierResult">
+        <include refid="selectTSupplierVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTSupplier" parameterType="TSupplier" useGeneratedKeys="true" keyProperty="id">
+        insert into t_supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="contactPeople != null and contactPeople != ''">contact_people,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="address != null">address,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="contactPeople != null and contactPeople != ''">#{contactPeople},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="address != null">#{address},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTSupplier" parameterType="TSupplier">
+        update t_supplier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="contactPeople != null and contactPeople != ''">contact_people = #{contactPeople},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="address != null">address = #{address},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTSupplierById" parameterType="Long">
+        delete from t_supplier where id = #{id}
+    </delete>
+
+    <delete id="deleteTSupplierByIds" parameterType="String">
+        delete from t_supplier where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

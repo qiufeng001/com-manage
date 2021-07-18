@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author manage
  */
-public class BaseEntity implements Serializable {
+public class BaseEntity implements IEntity, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -66,6 +66,26 @@ public class BaseEntity implements Serializable {
 
     public void setCreateBy(String createBy) {
         this.createBy = createBy;
+    }
+
+    @Override
+    public Object getId() {
+        return null;
+    }
+
+    @Override
+    public void setId(Object val) {
+
+    }
+
+    @Override
+    public void setName(String name) {
+
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 
     public Date getCreateTime() {

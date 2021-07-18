@@ -3,10 +3,11 @@ package com.manage.web.controller.system;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.Constants;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysMenu;
 import com.manage.common.core.core.domain.model.LoginUser;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.ServletUtils;
@@ -31,6 +32,11 @@ import java.util.List;
 public class SysMenuController extends BaseController {
     @Autowired
     private ISysMenuService menuService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     @Autowired
     private TokenService tokenService;

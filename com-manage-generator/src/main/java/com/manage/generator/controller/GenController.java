@@ -1,9 +1,10 @@
 package com.manage.generator.controller;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.core.text.Convert;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.generator.domain.GenTable;
@@ -35,6 +36,11 @@ public class GenController extends BaseController {
 
     @Autowired
     private IGenTableColumnService genTableColumnService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 查询代码生成列表

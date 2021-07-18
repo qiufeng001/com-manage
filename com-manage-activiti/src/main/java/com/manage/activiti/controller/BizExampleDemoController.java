@@ -5,9 +5,10 @@ import com.manage.activiti.domain.BizExampleDemo;
 import com.manage.activiti.service.IBizExampleDemoService;
 import com.manage.activiti.service.IProcessService;
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.poi.ExcelUtil;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ import static com.manage.common.core.core.domain.AjaxResult.success;
 @RequestMapping("/example/demo")
 @AllArgsConstructor
 public class BizExampleDemoController extends BaseController {
+
     @Autowired
     private IBizExampleDemoService bizExampleDemoService;
     @Autowired
@@ -60,6 +62,11 @@ public class BizExampleDemoController extends BaseController {
         List<BizExampleDemo> list = bizExampleDemoService.selectBizExampleDemoList(bizExampleDemo);
         ExcelUtil<BizExampleDemo> util = new ExcelUtil<BizExampleDemo>(BizExampleDemo.class);
         return util.exportExcel(list, "demo");
+    }
+
+    @Override
+    protected IService getService() {
+        return null;
     }
 
     /**

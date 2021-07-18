@@ -2,10 +2,11 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysDictType;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.poi.ExcelUtil;
@@ -27,6 +28,11 @@ import java.util.List;
 public class SysDictTypeController extends BaseController {
     @Autowired
     private ISysDictTypeService dictTypeService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")

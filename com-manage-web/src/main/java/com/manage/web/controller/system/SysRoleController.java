@@ -2,17 +2,17 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysRole;
 import com.manage.common.core.core.domain.model.LoginUser;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.ServletUtils;
 import com.manage.common.core.utils.StringUtils;
 import com.manage.common.core.utils.poi.ExcelUtil;
-import com.manage.domain.domain.SysPost;
 import com.manage.domain.service.ISysRoleService;
 import com.manage.domain.service.ISysUserService;
 import com.manage.framework.web.service.SysPermissionService;
@@ -43,6 +43,11 @@ public class SysRoleController extends BaseController {
 
     @Autowired
     private ISysUserService userService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")

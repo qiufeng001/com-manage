@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manage.business.mapper.TGoodsMapper">
+    
+    <resultMap type="TGoods" id="TGoodsResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="number"    column="number"    />
+        <result property="total"    column="total"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTGoodsVo">
+        select id, name, number, total, supplier_id, unit_price, create_by, create_time from t_goods
+    </sql>
+
+    <select id="selectTGoodsList" parameterType="TGoods" resultMap="TGoodsResult">
+        <include refid="selectTGoodsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="total != null "> and total = #{total}</if>
+            <if test="supplierId != null "> and supplier_id = #{supplierId}</if>
+            <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+        </where>
+    </select>
+    
+    <select id="selectTGoodsById" parameterType="Long" resultMap="TGoodsResult">
+        <include refid="selectTGoodsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTGoods" parameterType="TGoods" useGeneratedKeys="true" keyProperty="id">
+        insert into t_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="number != null">number,</if>
+            <if test="total != null">total,</if>
+            <if test="supplierId != null">supplier_id,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="number != null">#{number},</if>
+            <if test="total != null">#{total},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTGoods" parameterType="TGoods">
+        update t_goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="total != null">total = #{total},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTGoodsById" parameterType="Long">
+        delete from t_goods where id = #{id}
+    </delete>
+
+    <delete id="deleteTGoodsByIds" parameterType="String">
+        delete from t_goods where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

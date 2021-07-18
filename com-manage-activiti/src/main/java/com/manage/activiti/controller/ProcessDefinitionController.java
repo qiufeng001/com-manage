@@ -6,9 +6,10 @@ import com.manage.activiti.domain.ProcessDefinition;
 import com.manage.activiti.service.IProcessDefinitionService;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.Constants;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.StringUtils;
 import com.manage.common.core.utils.file.FileUploadUtils;
@@ -58,6 +59,11 @@ public class ProcessDefinitionController extends BaseController {
     private RepositoryService repositoryService;
     @Value("${manage.profile}")
     private String uploadPath;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     @PreAuthorize("@ss.hasPermi('activiti:definition:list')")
     @GetMapping("/list")

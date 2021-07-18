@@ -1,7 +1,8 @@
 package com.manage.web.controller.tool;
 
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.utils.StringUtils;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,11 @@ public class TestController extends BaseController {
     {
         users.put(1, new UserEntity(1, "admin", "admin123", "15888888888"));
         users.put(2, new UserEntity(2, "ry", "admin123", "15666666666"));
+    }
+
+    @Override
+    protected IService getService() {
+        return null;
     }
 
     @ApiOperation("获取用户列表")

@@ -2,10 +2,11 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.config.ManageConfig;
-import com.manage.common.core.core.controller.BaseController;
+import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysUser;
 import com.manage.common.core.core.domain.model.LoginUser;
+import com.manage.common.core.core.service.IService;
 import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.ServletUtils;
@@ -31,6 +32,11 @@ public class SysProfileController extends BaseController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Override
+    protected IService getService() {
+        return null;
+    }
 
     /**
      * 个人信息
