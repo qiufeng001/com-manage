@@ -2,7 +2,7 @@ package com.manage.web.controller.system;
 
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysDictData;
 import com.manage.common.core.core.page.TableDataInfo;
@@ -28,14 +28,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/dict/data")
-public class SysDictDataController extends BaseController {
+public class SysDictDataController extends AbstractController {
     @Autowired
     private ISysDictDataService dictDataService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @Autowired
     private ISysDictTypeService dictTypeService;

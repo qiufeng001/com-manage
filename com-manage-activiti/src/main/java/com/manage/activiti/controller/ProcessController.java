@@ -5,7 +5,7 @@ import com.manage.activiti.config.WorkflowConstants;
 import com.manage.activiti.domain.HistoricActivity;
 import com.manage.activiti.domain.TaskVo;
 import com.manage.activiti.service.IProcessService;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -48,7 +48,7 @@ import static com.manage.common.core.core.domain.AjaxResult.success;
 @RestController
 @RequestMapping("/activiti/process")
 @AllArgsConstructor
-public class ProcessController extends BaseController {
+public class ProcessController extends AbstractController {
     @Autowired
     private RepositoryService repositoryService;
     @Autowired
@@ -59,11 +59,6 @@ public class ProcessController extends BaseController {
     private IProcessService processService;
     @Autowired
     private RuntimeService runtimeService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 审批历史列表

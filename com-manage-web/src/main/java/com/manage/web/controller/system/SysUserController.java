@@ -3,7 +3,7 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysRole;
 import com.manage.common.core.core.domain.entity.SysUser;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/system/user")
-public class SysUserController extends BaseController {
+public class SysUserController extends AbstractController {
     @Autowired
     private ISysUserService userService;
 
@@ -47,11 +47,6 @@ public class SysUserController extends BaseController {
 
     @Autowired
     private TokenService tokenService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 获取用户列表

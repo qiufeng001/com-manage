@@ -1,7 +1,7 @@
 package com.manage.quartz.controller;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -26,14 +26,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/monitor/job")
-public class SysJobController extends BaseController {
+public class SysJobController extends AbstractController {
     @Autowired
     private ISysJobService jobService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 查询定时任务列表

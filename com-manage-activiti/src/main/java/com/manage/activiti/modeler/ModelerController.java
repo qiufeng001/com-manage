@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.pagehelper.Page;
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.PageDomain;
 import com.manage.common.core.core.page.TableDataInfo;
@@ -50,17 +50,12 @@ import static org.activiti.editor.constants.ModelDataJsonConstants.MODEL_NAME;
 @Controller
 @RequestMapping("/activiti/modeler")
 @AllArgsConstructor
-public class ModelerController extends BaseController {
+public class ModelerController extends AbstractController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelEditorJsonRestResource.class);
 
     @Autowired
     private RepositoryService repositoryService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 模型列表

@@ -1,19 +1,46 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="店铺名称" prop="shopName">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入供应商名称"
+          v-model="queryParams.shopName"
+          placeholder="请输入店铺名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="联系人" prop="contactPeople">
+      <el-form-item label="负责人id" prop="headId">
         <el-input
-          v-model="queryParams.contactPeople"
-          placeholder="请输入联系人"
+          v-model="queryParams.headId"
+          placeholder="请输入负责人id"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="负责人名称" prop="headName">
+        <el-input
+          v-model="queryParams.headName"
+          placeholder="请输入负责人名称"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="店铺联系电话 " prop="contactPhoneNumber">
+        <el-input
+          v-model="queryParams.contactPhoneNumber"
+          placeholder="请输入店铺联系电话 "
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="店铺地址" prop="address">
+        <el-input
+          v-model="queryParams.address"
+          placeholder="请输入店铺地址"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -67,13 +94,15 @@
 	  <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="supplierList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="shopList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="联系地址" align="center" prop="id" />
-      <el-table-column label="供应商名称" align="center" prop="name" />
-      <el-table-column label="联系人" align="center" prop="contactPeople" />
-      <el-table-column label="联系电话" align="center" prop="phone" />
-      <el-table-column label="联系地址" align="center" prop="address" />
+      <el-table-column label="店铺地址" align="center" prop="id" />
+      <el-table-column label="店铺名称" align="center" prop="shopName" />
+      <el-table-column label="负责人id" align="center" prop="headId" />
+      <el-table-column label="负责人名称" align="center" prop="headName" />
+      <el-table-column label="店铺联系电话 " align="center" prop="contactPhoneNumber" />
+      <el-table-column label="店铺地址" align="center" prop="address" />
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -102,20 +131,23 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改供应商对话框 -->
+    <!-- 添加或修改门店对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="供应商名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入供应商名称" />
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-form-item label="店名" prop="shopName">
+          <el-input v-model="form.shopName" placeholder="请输入店铺名称" />
         </el-form-item>
-        <el-form-item label="联系人" prop="contactPeople">
-          <el-input v-model="form.contactPeople" placeholder="请输入联系人" />
+        <el-form-item label="负责人" prop="headName">
+          <el-input v-model="form.headName" placeholder="请输入负责人名称" />
         </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入联系电话" />
+        <el-form-item label="联系电话 " prop="contactPhoneNumber">
+          <el-input v-model="form.contactPhoneNumber" placeholder="请输入店铺联系电话 " />
         </el-form-item>
-        <el-form-item label="联系地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入联系地址" />
+        <el-form-item label="地址" prop="address">
+          <el-input v-model="form.address" placeholder="请输入店铺地址" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -127,10 +159,10 @@
 </template>
 
 <script>
-import { listSupplier, getSupplier, delSupplier, addSupplier, updateSupplier, exportSupplier } from "@/api/business/supplier";
+import { listShop, getShop, delShop, addShop, updateShop, exportShop } from "@/api/system/shop";
 
 export default {
-  name: "Supplier",
+  name: "Shop",
   components: {
   },
   data() {
@@ -147,8 +179,10 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 供应商表格数据
-      supplierList: [],
+      // 门店表格数据
+      shopList: [],
+      //
+      headOption: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -157,23 +191,42 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: null,
-        contactPeople: null,
-        phone: null,
-        address: null
+        shopName: null,
+        headId: null,
+        headName: null,
+        contactPhoneNumber: null,
+        address: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        name: [
-          { required: true, message: "供应商名称不能为空", trigger: "blur" }
+        shopName: [
+          { required: true, message: "店铺名称不能为空", trigger: "blur" }
         ],
-        contactPeople: [
-          { required: true, message: "联系人不能为空", trigger: "blur" }
+        headId: [
+          { required: true, message: "负责人id不能为空", trigger: "blur" }
         ],
-        phone: [
-          { required: true, message: "联系电话不能为空", trigger: "blur" }
+        headName: [
+          { required: true, message: "负责人名称不能为空", trigger: "blur" }
+        ],
+        contactPhoneNumber: [
+          { required: true, message: "店铺联系电话 不能为空", trigger: "blur" }
+        ],
+        address: [
+          { required: true, message: "店铺地址不能为空", trigger: "blur" }
+        ],
+        createBy: [
+          { required: true, message: "创建人名称不能为空", trigger: "blur" }
+        ],
+        updateBy: [
+          { required: true, message: "修改人名称不能为空", trigger: "blur" }
+        ],
+        createTime: [
+          { required: true, message: "创建时间不能为空", trigger: "blur" }
+        ],
+        updateTime: [
+          { required: true, message: "修改时间不能为空", trigger: "blur" }
         ],
       }
     };
@@ -182,11 +235,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询供应商列表 */
+    /** 查询门店列表 */
     getList() {
       this.loading = true;
-      listSupplier(this.queryParams).then(response => {
-        this.supplierList = response.rows;
+      listShop(this.queryParams).then(response => {
+        this.shopList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -200,10 +253,16 @@ export default {
     reset() {
       this.form = {
         id: null,
-        name: null,
-        contactPeople: null,
-        phone: null,
-        address: null
+        shopName: null,
+        headId: null,
+        headName: null,
+        contactPhoneNumber: null,
+        address: null,
+        createBy: null,
+        updateBy: null,
+        createTime: null,
+        updateTime: null,
+        remark: null
       };
       this.resetForm("form");
     },
@@ -227,16 +286,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加供应商";
+      this.title = "添加门店";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getSupplier(id).then(response => {
+      getShop(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改供应商";
+        this.title = "修改门店";
       });
     },
     /** 提交按钮 */
@@ -244,13 +303,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateSupplier(this.form).then(response => {
+            updateShop(this.form).then(response => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addSupplier(this.form).then(response => {
+            addShop(this.form).then(response => {
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -262,12 +321,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除供应商编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除门店编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delSupplier(ids);
+          return delShop(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
@@ -276,12 +335,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有供应商数据项?', "警告", {
+      this.$confirm('是否确认导出所有门店数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return exportSupplier(queryParams);
+          return exportShop(queryParams);
         }).then(response => {
           this.download(response.msg);
         })

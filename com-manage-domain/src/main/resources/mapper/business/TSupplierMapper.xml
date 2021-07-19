@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, name, contact_people, phone, address from t_supplier
     </sql>
 
-    <select id="selectTSupplierList" parameterType="TSupplier" resultMap="TSupplierResult">
+    <select id="selectList" parameterType="TSupplier" resultMap="TSupplierResult">
         <include refid="selectTSupplierVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -26,12 +26,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectTSupplierById" parameterType="Long" resultMap="TSupplierResult">
+    <select id="selectById" parameterType="Long" resultMap="TSupplierResult">
         <include refid="selectTSupplierVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertTSupplier" parameterType="TSupplier" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="TSupplier" useGeneratedKeys="true" keyProperty="id">
         insert into t_supplier
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateTSupplier" parameterType="TSupplier">
+    <update id="update" parameterType="TSupplier">
         update t_supplier
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
@@ -58,11 +58,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteTSupplierById" parameterType="Long">
+    <delete id="deleteById" parameterType="Long">
         delete from t_supplier where id = #{id}
     </delete>
 
-    <delete id="deleteTSupplierByIds" parameterType="String">
+    <delete id="deleteByIds" parameterType="String">
         delete from t_supplier where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

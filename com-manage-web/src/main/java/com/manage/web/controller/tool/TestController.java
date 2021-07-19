@@ -1,6 +1,6 @@
 package com.manage.web.controller.tool;
 
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.service.IService;
 import com.manage.common.core.utils.StringUtils;
@@ -20,17 +20,12 @@ import java.util.Map;
 @Api("用户信息管理")
 @RestController
 @RequestMapping("/test/user")
-public class TestController extends BaseController {
+public class TestController extends AbstractController {
     private final static Map<Integer, UserEntity> users = new LinkedHashMap<Integer, UserEntity>();
 
     {
         users.put(1, new UserEntity(1, "admin", "admin123", "15888888888"));
         users.put(2, new UserEntity(2, "ry", "admin123", "15666666666"));
-    }
-
-    @Override
-    protected IService getService() {
-        return null;
     }
 
     @ApiOperation("获取用户列表")

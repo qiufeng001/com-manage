@@ -2,7 +2,7 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysRole;
 import com.manage.common.core.core.domain.model.LoginUser;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/role")
-public class SysRoleController extends BaseController {
+public class SysRoleController extends AbstractController {
     @Autowired
     private ISysRoleService roleService;
 
@@ -43,11 +43,6 @@ public class SysRoleController extends BaseController {
 
     @Autowired
     private ISysUserService userService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")

@@ -1,28 +1,31 @@
-package com.manage.web.controller.business;
+package com.manage.web.controller.system;
 
-import com.manage.business.domain.TDiscount;
+import java.util.List;
+
 import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.service.IService;
+import com.manage.domain.domain.TShop;
+import com.manage.domain.service.ITShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.manage.business.service.ITDiscountService;
 
 /**
- * 折扣Controller
+ * 门店Controller
  *
  * @author zhong.h
- * @date 2021-07-17
+ * @date 2021-07-15
  */
 @RestController
-@RequestMapping("/business/discount")
-public class TDiscountController extends BaseController<TDiscount, Long> {
+@RequestMapping("/system/shop")
+public class TShopController extends BaseController<TShop, Long> {
 
     @Autowired
-    private ITDiscountService tDiscountService;
+    private ITShopService service;
+
 
     @Override
     protected IService getService() {
-        return tDiscountService;
+        return service;
     }
 }

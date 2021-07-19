@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select name, discount_rate, effect_time, invalid_time, create_by, update_by, create_time, update_time, id from t_discount
     </sql>
 
-    <select id="selectTDiscountList" parameterType="TDiscount" resultMap="TDiscountResult">
+    <select id="selectList" parameterType="TDiscount" resultMap="TDiscountResult">
         <include refid="selectTDiscountVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -30,12 +30,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectTDiscountById" parameterType="Long" resultMap="TDiscountResult">
+    <select id="selectById" parameterType="Long" resultMap="TDiscountResult">
         <include refid="selectTDiscountVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertTDiscount" parameterType="TDiscount" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="TDiscount" useGeneratedKeys="true" keyProperty="id">
         insert into t_discount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateTDiscount" parameterType="TDiscount">
+    <update id="update" parameterType="TDiscount">
         update t_discount
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
@@ -74,11 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteTDiscountById" parameterType="Long">
+    <delete id="deleteById" parameterType="Long">
         delete from t_discount where id = #{id}
     </delete>
 
-    <delete id="deleteTDiscountByIds" parameterType="String">
+    <delete id="deleteByIds" parameterType="String">
         delete from t_discount where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

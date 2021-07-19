@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.HttpStatus;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.controller.IController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.PageDomain;
@@ -35,7 +36,7 @@ import java.util.List;
  * @author zhong.h
  * @date 2019/11/1
  */
-public abstract class BaseController<T extends IEntity, K> implements IController<T, K> {
+public abstract class BaseController<T extends IEntity, K> extends AbstractController implements IController<T, K> {
 
     protected abstract IService<T, K> getService();
 
@@ -112,62 +113,5 @@ public abstract class BaseController<T extends IEntity, K> implements IControlle
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(getService().deleteByIds(ids));
-    }
-
-    /**
-     * 将前台传递过来的日期格式的字符串，自动转化为Date类型
-     */
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        // Date 类型转换
-        binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                setValue(DateUtils.parseDate(text));
-            }
-        });
-    }
-
-    /**
-     * 设置请求分页数据
-     */
-    protected void startPage() {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        Integer pageNum = pageDomain.getPageNum();
-        Integer pageSize = pageDomain.getPageSize();
-        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize)) {
-            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-            PageHelper.startPage(pageNum, pageSize, orderBy);
-        }
-    }
-
-    /**
-     * 响应请求分页数据
-     */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected TableDataInfo getDataTable(List<?> list) {
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(HttpStatus.SUCCESS);
-        rspData.setMsg("查询成功");
-        rspData.setRows(list);
-        rspData.setTotal(new PageInfo(list).getTotal());
-        return rspData;
-    }
-
-    /**
-     * 响应返回结果
-     *
-     * @param rows 影响行数
-     * @return 操作结果
-     */
-    protected AjaxResult toAjax(int rows) {
-        return rows > 0 ? AjaxResult.success() : AjaxResult.error();
-    }
-
-    /**
-     * 页面跳转
-     */
-    public String redirect(String url) {
-        return StringUtils.format("redirect:{}", url);
     }
 }

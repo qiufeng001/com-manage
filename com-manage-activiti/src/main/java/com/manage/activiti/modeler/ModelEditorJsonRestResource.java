@@ -14,11 +14,10 @@ package com.manage.activiti.modeler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.entity.SysRole;
 import com.manage.common.core.core.domain.entity.SysUser;
 import com.manage.common.core.core.page.TableDataInfo;
-import com.manage.common.core.core.service.IService;
 import com.manage.domain.mapper.SysUserMapper;
 import com.manage.domain.service.ISysRoleService;
 import com.manage.domain.service.ISysUserService;
@@ -42,7 +41,7 @@ import java.util.List;
  */
 @RestController
 @AllArgsConstructor
-public class ModelEditorJsonRestResource extends BaseController implements ModelDataJsonConstants {
+public class ModelEditorJsonRestResource extends AbstractController implements ModelDataJsonConstants {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelEditorJsonRestResource.class);
 
@@ -56,11 +55,6 @@ public class ModelEditorJsonRestResource extends BaseController implements Model
     private ISysRoleService roleService;
     @Autowired
     private SysUserMapper userMapper;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @RequestMapping(value = "/modeler/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json")
     public ObjectNode getEditorJson(@PathVariable String modelId) {

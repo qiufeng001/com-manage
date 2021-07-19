@@ -32,7 +32,7 @@ import com.manage.common.core.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/business/goods")
-public class TGoodsController extends BaseController {
+public class TGoodsController extends BaseController<TGoods, Long> {
 
     @Autowired
     private ITGoodsService tGoodsService;

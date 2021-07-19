@@ -2,7 +2,7 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.config.ManageConfig;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysUser;
 import com.manage.common.core.core.domain.model.LoginUser;
@@ -26,17 +26,12 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/system/user/profile")
-public class SysProfileController extends BaseController {
+public class SysProfileController extends AbstractController {
     @Autowired
     private ISysUserService userService;
 
     @Autowired
     private TokenService tokenService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 个人信息

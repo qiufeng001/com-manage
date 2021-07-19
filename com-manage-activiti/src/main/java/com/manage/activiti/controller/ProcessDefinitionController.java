@@ -6,7 +6,7 @@ import com.manage.activiti.domain.ProcessDefinition;
 import com.manage.activiti.service.IProcessDefinitionService;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.Constants;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -49,7 +49,7 @@ import static com.manage.common.core.core.domain.AjaxResult.success;
  */
 @Controller
 @RequestMapping("/activiti/definition")
-public class ProcessDefinitionController extends BaseController {
+public class ProcessDefinitionController extends AbstractController {
 
     private static final Logger log = LoggerFactory.getLogger(ProcessDefinitionController.class);
 
@@ -59,11 +59,6 @@ public class ProcessDefinitionController extends BaseController {
     private RepositoryService repositoryService;
     @Value("${manage.profile}")
     private String uploadPath;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @PreAuthorize("@ss.hasPermi('activiti:definition:list')")
     @GetMapping("/list")

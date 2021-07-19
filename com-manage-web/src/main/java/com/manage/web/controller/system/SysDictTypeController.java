@@ -2,7 +2,7 @@ package com.manage.web.controller.system;
 
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysDictType;
 import com.manage.common.core.core.page.TableDataInfo;
@@ -25,14 +25,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/dict/type")
-public class SysDictTypeController extends BaseController {
+public class SysDictTypeController extends AbstractController {
+
     @Autowired
     private ISysDictTypeService dictTypeService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")

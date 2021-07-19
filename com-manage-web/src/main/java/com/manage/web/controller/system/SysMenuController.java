@@ -3,7 +3,7 @@ package com.manage.web.controller.system;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.constant.Constants;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysMenu;
 import com.manage.common.core.core.domain.model.LoginUser;
@@ -29,14 +29,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/menu")
-public class SysMenuController extends BaseController {
+public class SysMenuController extends AbstractController {
     @Autowired
     private ISysMenuService menuService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @Autowired
     private TokenService tokenService;

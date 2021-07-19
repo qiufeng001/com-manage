@@ -5,7 +5,7 @@ import com.manage.activiti.domain.BizExampleDemo;
 import com.manage.activiti.service.IBizExampleDemoService;
 import com.manage.activiti.service.IProcessService;
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -34,7 +34,7 @@ import static com.manage.common.core.core.domain.AjaxResult.success;
 @RestController
 @RequestMapping("/example/demo")
 @AllArgsConstructor
-public class BizExampleDemoController extends BaseController {
+public class BizExampleDemoController extends AbstractController {
 
     @Autowired
     private IBizExampleDemoService bizExampleDemoService;
@@ -62,11 +62,6 @@ public class BizExampleDemoController extends BaseController {
         List<BizExampleDemo> list = bizExampleDemoService.selectBizExampleDemoList(bizExampleDemo);
         ExcelUtil<BizExampleDemo> util = new ExcelUtil<BizExampleDemo>(BizExampleDemo.class);
         return util.exportExcel(list, "demo");
-    }
-
-    @Override
-    protected IService getService() {
-        return null;
     }
 
     /**

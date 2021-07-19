@@ -3,7 +3,7 @@ package com.manage.web.controller.system;
 import com.manage.common.core.annotation.Log;
 import com.manage.common.core.annotation.RepeatSubmit;
 import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -26,15 +26,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/config")
-public class SysConfigController extends BaseController {
+public class SysConfigController extends AbstractController {
 
     @Autowired
     private ISysConfigService configService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 获取参数配置列表

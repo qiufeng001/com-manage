@@ -1,7 +1,7 @@
 package com.manage.web.controller.monitor;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -22,14 +22,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/monitor/logininfor")
-public class SysLogininforController extends BaseController {
+public class SysLogininforController extends AbstractController {
     @Autowired
     private ISysLogininforService logininforService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")
     @GetMapping("/list")

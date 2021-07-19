@@ -30,7 +30,7 @@ import com.manage.common.core.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/business/supplier")
-public class TSupplierController extends BaseController {
+public class TSupplierController extends BaseController<TSupplier, Long> {
     @Autowired
     private ITSupplierService tSupplierService;
 

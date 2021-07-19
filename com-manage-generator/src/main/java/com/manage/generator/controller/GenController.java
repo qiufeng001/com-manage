@@ -1,7 +1,7 @@
 package com.manage.generator.controller;
 
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -30,17 +30,13 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/tool/gen")
-public class GenController extends BaseController {
+public class GenController extends AbstractController {
+
     @Autowired
     private IGenTableService genTableService;
 
     @Autowired
     private IGenTableColumnService genTableColumnService;
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 查询代码生成列表

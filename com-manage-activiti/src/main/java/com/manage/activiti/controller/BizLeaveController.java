@@ -4,7 +4,7 @@ import com.manage.activiti.domain.BizLeave;
 import com.manage.activiti.service.IBizLeaveService;
 import com.manage.activiti.service.IProcessService;
 import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.controller.impl.BaseController;
+import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -29,18 +29,12 @@ import static com.manage.common.core.core.domain.AjaxResult.success;
 @RestController
 @RequestMapping("/leave/leave")
 @AllArgsConstructor
-public class BizLeaveController extends BaseController {
+public class BizLeaveController extends AbstractController {
     @Autowired
     private IBizLeaveService bizLeaveService;
 
     @Autowired
     private IProcessService processService;
-
-
-    @Override
-    protected IService getService() {
-        return null;
-    }
 
     /**
      * 查询请假列表

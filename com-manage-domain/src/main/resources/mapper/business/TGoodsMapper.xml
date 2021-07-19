@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, name, number, total, supplier_id, unit_price, create_by, create_time from t_goods
     </sql>
 
-    <select id="selectTGoodsList" parameterType="TGoods" resultMap="TGoodsResult">
+    <select id="selectList" parameterType="TGoods" resultMap="TGoodsResult">
         <include refid="selectTGoodsVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -30,12 +30,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectTGoodsById" parameterType="Long" resultMap="TGoodsResult">
+    <select id="selectById" parameterType="Long" resultMap="TGoodsResult">
         <include refid="selectTGoodsVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertTGoods" parameterType="TGoods" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="TGoods" useGeneratedKeys="true" keyProperty="id">
         insert into t_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateTGoods" parameterType="TGoods">
+    <update id="update" parameterType="TGoods">
         update t_goods
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
@@ -71,11 +71,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteTGoodsById" parameterType="Long">
+    <delete id="deleteById" parameterType="Long">
         delete from t_goods where id = #{id}
     </delete>
 
-    <delete id="deleteTGoodsByIds" parameterType="String">
+    <delete id="deleteByIds" parameterType="String">
         delete from t_goods where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
