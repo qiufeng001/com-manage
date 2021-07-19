@@ -54,4 +54,12 @@ public class TGoodsController extends BaseController<TGoods, Long> {
         ajaxResult.put("suppliers", supplierService.selectList(new TSupplier()));
         return ajaxResult;
     }
+
+    /**
+     * 获取商品详细信息
+     */
+    @GetMapping(value = "/listSupplier")
+    public AjaxResult listSupplier() {
+        return AjaxResult.success(supplierService.selectList(new TSupplier()));
+    }
 }

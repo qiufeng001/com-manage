@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="number"    column="number"    />
         <result property="total"    column="total"    />
         <result property="supplierId"    column="supplier_id"    />
+        <result property="supplierName"    column="supplier_name"    />
         <result property="unitPrice"    column="unit_price"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -20,13 +21,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectList" parameterType="TGoods" resultMap="TGoodsResult">
-        <include refid="selectTGoodsVo"/>
+        select t.id, t.name, t.number, t.total, t.supplier_id, s.name as  supplier_name, t.unit_price, t.create_by, t.create_time from t_goods t
+        LEFT JOIN t_supplier s on s.id = t.supplier_id
         <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="number != null "> and number = #{number}</if>
-            <if test="total != null "> and total = #{total}</if>
-            <if test="supplierId != null "> and supplier_id = #{supplierId}</if>
-            <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+            <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
+            <if test="number != null "> and t.number = #{number}</if>
+            <if test="total != null "> and t.total = #{total}</if>
+            <if test="supplierId != null "> and t.supplier_id = #{supplierId}</if>
+            <if test="unitPrice != null "> and t.unit_price = #{unitPrice}</if>
         </where>
     </select>
     

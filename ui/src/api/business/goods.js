@@ -51,3 +51,11 @@ export function exportGoods(query) {
     params: query
   })
 }
+
+// 查询供应商
+export function listSupplier() {
+  return request({
+    url: '/business/goods/listSupplier',
+    method: 'get'
+  })
+}

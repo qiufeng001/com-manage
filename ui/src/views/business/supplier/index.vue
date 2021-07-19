@@ -69,8 +69,7 @@
 
     <el-table v-loading="loading" :data="supplierList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="联系地址" align="center" prop="id" />
-      <el-table-column label="供应商名称" align="center" prop="name" />
+      <el-table-column label="供应商" align="center" prop="name" />
       <el-table-column label="联系人" align="center" prop="contactPeople" />
       <el-table-column label="联系电话" align="center" prop="phone" />
       <el-table-column label="联系地址" align="center" prop="address" />
@@ -105,8 +104,8 @@
     <!-- 添加或修改供应商对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="供应商名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入供应商名称" />
+        <el-form-item label="供应商" prop="name">
+          <el-input v-model="form.name" placeholder="请输入供应商" />
         </el-form-item>
         <el-form-item label="联系人" prop="contactPeople">
           <el-input v-model="form.contactPeople" placeholder="请输入联系人" />

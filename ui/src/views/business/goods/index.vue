@@ -11,13 +11,15 @@
         />
       </el-form-item>
       <el-form-item label="供应商" prop="supplierId">
-        <el-input
-          v-model="queryParams.supplierId"
-          placeholder="请输入供应商"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.supplierId">
+           <el-option
+             v-for="item in suppliers"
+             :key="item.id"
+             :label="item.name"
+             :value="item.id"
+           ></el-option>
+         </el-select>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -69,12 +71,11 @@
 
     <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="单价" align="center" prop="id" />
       <el-table-column label="商品名称" align="center" prop="name" />
-      <el-table-column label="数量" align="center" prop="number" />
-      <el-table-column label="总共消耗数量" align="center" prop="total" />
-      <el-table-column label="供应商" align="center" prop="supplierId" />
-      <el-table-column label="单价" align="center" prop="unitPrice" />
+      <el-table-column label="单价" align="center" prop="unitPrice" formatter="amountFormatter"/>
+      <el-table-column label="库存" align="center" prop="number" />
+      <el-table-column label="总量" align="center" prop="total" />
+      <el-table-column label="供应商" align="center" prop="supplierName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -110,10 +111,10 @@
           <el-input v-model="form.name" placeholder="请输入商品名称" />
         </el-form-item>
         <el-form-item label="数量" prop="number">
-          <el-input v-model="form.number" placeholder="请输入数量" />
+          <el-input v-model="form.number" placeholder="请输入数量" oninput ="value=value.replace(/[^0-9.]/g,'')"/>
         </el-form-item>
         <el-form-item label="供应商" prop="supplierId">
-          <el-select v-model="form.supplierId" multiple placeholder="请选择">
+          <el-select v-model="form.supplierId" placeholder="请选择" width="90%">
             <el-option
               v-for="item in suppliers"
               :key="item.id"
@@ -135,7 +136,7 @@
 </template>
 
 <script>
-import { listGoods, getGoods, delGoods, addGoods, updateGoods, exportGoods } from "@/api/business/goods";
+import { listGoods, getGoods, delGoods, addGoods, updateGoods, exportGoods,listSupplier } from "@/api/business/goods";
 
 export default {
   name: "Goods",
@@ -161,6 +162,12 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 供应商
+      suppliers: [],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -189,6 +196,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getSuppliers();
   },
   methods: {
     /** 查询商品列表 */
@@ -198,6 +206,15 @@ export default {
         this.goodsList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    getSuppliers() {
+      listSupplier().then(response => {
+         if(response.code === 200) {
+            this.suppliers = response.data;
+         }else{
+            this.$alert(response.msg, "查询结果");
+         }
       });
     },
     // 取消按钮

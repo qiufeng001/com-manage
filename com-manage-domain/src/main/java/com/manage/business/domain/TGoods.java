@@ -43,6 +43,8 @@ public class TGoods extends BaseEntity {
     @Excel(name = "供应商")
     private Long supplierId;
 
+    private String supplierName;
+
     /**
      * 单价
      */
@@ -95,6 +97,14 @@ public class TGoods extends BaseEntity {
 
     public Long getUnitPrice() {
         return unitPrice;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     @Override
