@@ -22,13 +22,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="折扣方案" prop="discountId">
-        <el-input
-          v-model="queryParams.discountId"
-          placeholder="请输入折扣方案"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.discountId">
+           <el-option
+             v-for="item in discounts"
+             :key="item.id"
+             :label="item.name"
+             :value="item.id"
+           ></el-option>
+         </el-select>
+        </el-select>
       </el-form-item>
       <el-form-item label="收款人" prop="payee">
         <el-input
@@ -224,7 +226,7 @@ export default {
         this.orderList = response.rows;
         this.total = response.total;
         this.shops = response.fillData.shops;
-        this.shops = response.fillData.discounts;
+        this.discounts = response.fillData.discounts;
         this.loading = false;
       });
     },

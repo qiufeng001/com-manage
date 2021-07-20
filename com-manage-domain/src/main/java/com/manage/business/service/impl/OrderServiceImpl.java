@@ -57,7 +57,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         Map<String, Object> result = new HashMap<>();
         synchronized (this) {
             // 查看库存是否满足
-            List<OrderDetail> details = entity.getOrderDetails();
+            List<OrderDetail> details = entity.getDetails();
             Map<Long, TGoods> goodsMap = new HashMap<>();
             this.genGoodsMap(details, goodsMap, result);
             if((Integer) result.get("code") == 500) {
@@ -158,7 +158,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         Map<String, Object> result = new HashMap<>();
         synchronized (this) {
             // 查看库存是否满足
-            List<OrderDetail> details = entity.getOrderDetails();
+            List<OrderDetail> details = entity.getDetails();
             Map<Long, TGoods> goodsMap = new HashMap<>();
             this.genGoodsMap(details, goodsMap, result);
             if((Integer) result.get("code") == 500) {

@@ -66,7 +66,7 @@ public class Order extends BaseEntity {
     /**
      * 订单明细
      */
-    private List<OrderDetail> orderDetails;
+    private List<OrderDetail> details;
 
     public void setId(Long id) {
         this.id = id;
@@ -132,12 +132,12 @@ public class Order extends BaseEntity {
         return payee;
     }
 
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
+    public List<OrderDetail> getDetails() {
+        return details;
     }
 
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
+    public void setDetails(List<OrderDetail> details) {
+        this.details = details;
     }
 
     @Override

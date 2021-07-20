@@ -67,3 +67,11 @@ export function listDiscounts() {
     method: 'get'
   })
 }
+
+// 查询折扣和商品列表
+export function getInfo() {
+  return request({
+    url: '/business/order/getInfo',
+    method: 'get'
+  })
+}

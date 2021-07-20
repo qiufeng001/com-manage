@@ -1,17 +1,21 @@
 package com.manage.web.controller.business;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.manage.business.domain.TDiscount;
+import com.manage.business.domain.TGoods;
+import com.manage.business.domain.TSupplier;
 import com.manage.business.service.ITDiscountService;
+import com.manage.business.service.ITGoodsService;
+import com.manage.common.core.annotation.Log;
+import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.domain.entity.TShop;
+import com.manage.common.core.enums.BusinessType;
 import com.manage.domain.service.ITShopService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.service.IService;
 import com.manage.business.domain.Order;
@@ -29,12 +33,12 @@ public class OrderController extends BaseController<Order, Long> {
 
     @Autowired
     private IOrderService service;
-
     @Autowired
     private ITShopService shopService;
-
     @Autowired
     private ITDiscountService discountService;
+    @Autowired
+    private ITGoodsService goodsService;
 
     @Override
     protected IService getService() {
@@ -54,5 +58,18 @@ public class OrderController extends BaseController<Order, Long> {
         return tableDataInfo;
     }
 
+    @Log(title = "新增数据", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/addOrder")
+    public Map<String, Object> addOrder(@RequestBody Order entity) {
+        return service.addOrder(entity);
+    }
 
+    @GetMapping(value = "/getInfo")
+    public AjaxResult getInfo() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("goods", goodsService.selectList(new TGoods()));
+        List<TDiscount> discounts = discountService.selectList(new TDiscount());
+        result.put("discounts",  discounts == null ? new ArrayList<>() : Arrays.asList(discounts.get(0)));
+        return AjaxResult.success(result);
+    }
 }
