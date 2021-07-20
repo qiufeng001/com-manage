@@ -47,17 +47,6 @@ public class TGoodsController extends BaseController<TGoods, Long> {
     /**
      * 获取商品详细信息
      */
-    @PreAuthorize("@ss.hasPermi('business:goods:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id) {
-        AjaxResult ajaxResult = AjaxResult.success(tGoodsService.selectById(id));
-        ajaxResult.put("suppliers", supplierService.selectList(new TSupplier()));
-        return ajaxResult;
-    }
-
-    /**
-     * 获取商品详细信息
-     */
     @GetMapping(value = "/listSupplier")
     public AjaxResult listSupplier() {
         return AjaxResult.success(supplierService.selectList(new TSupplier()));

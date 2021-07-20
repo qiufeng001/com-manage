@@ -355,6 +355,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             if (camel.isEmpty()) {
                 continue;
             }
+            // 这里是为了去掉前缀T,例如TOrder 改为-> Order
+            if(camel.equals("t")) {
+                continue;
+            }
             // 首字母大写
             result.append(camel.substring(0, 1).toUpperCase());
             result.append(camel.substring(1).toLowerCase());

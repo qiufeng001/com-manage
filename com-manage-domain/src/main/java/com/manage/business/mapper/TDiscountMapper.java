@@ -1,5 +1,6 @@
 package com.manage.business.mapper;
 
+import com.manage.business.domain.TDiscount;
 import com.manage.common.core.core.mapper.IMapper;
 
 /**
@@ -8,6 +9,6 @@ import com.manage.common.core.core.mapper.IMapper;
  * @author zhong.h
  * @date 2021-07-17
  */
-public interface TDiscountMapper extends IMapper {
+public interface TDiscountMapper extends IMapper<TDiscount, Long> {
 
 }

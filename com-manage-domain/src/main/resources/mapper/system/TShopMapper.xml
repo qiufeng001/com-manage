@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, shop_name, head_id, head_name, contact_phone_number, address, create_by, update_by, create_time, update_time, remark from t_shop
     </sql>
 
-    <select id="selectTShopList" parameterType="TShop" resultMap="TShopResult">
+    <select id="selectList" parameterType="TShop" resultMap="TShopResult">
         <include refid="selectTShopVo"/>
         <where>  
             <if test="shopName != null  and shopName != ''"> and shop_name like concat('%', #{shopName}, '%')</if>
@@ -33,12 +33,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectTShopById" parameterType="Long" resultMap="TShopResult">
+    <select id="selectById" parameterType="Long" resultMap="TShopResult">
         <include refid="selectTShopVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertTShop" parameterType="TShop">
+    <insert id="insert" parameterType="TShop">
         insert into t_shop
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateTShop" parameterType="TShop">
+    <update id="update" parameterType="TShop">
         update t_shop
         <trim prefix="SET" suffixOverrides=",">
             <if test="shopName != null and shopName != ''">shop_name = #{shopName},</if>
@@ -85,11 +85,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteTShopById" parameterType="Long">
+    <delete id="deleteById" parameterType="Long">
         delete from t_shop where id = #{id}
     </delete>
 
-    <delete id="deleteTShopByIds" parameterType="String">
+    <delete id="deleteByIds" parameterType="String">
         delete from t_shop where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

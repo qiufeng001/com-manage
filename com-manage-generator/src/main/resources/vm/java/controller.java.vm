@@ -2,26 +2,14 @@ package ${packageName}.controller;
 
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.manage.common.core.annotation.Log;
-import com.manage.common.core.core.domain.AjaxResult;
-import com.manage.common.core.enums.BusinessType;
 import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.service.IService;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.service.I${ClassName}Service;
-import com.manage.common.core.utils.poi.ExcelUtil;
 #if($table.crud)
-import com.manage.common.core.core.page.TableDataInfo;
 #elseif($table.tree)
 #end
 
@@ -33,7 +21,7 @@ import com.manage.common.core.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/${moduleName}/${businessName}")
-public class ${ClassName}Controller extends BaseController {
+public class ${ClassName}Controller extends BaseController<${ClassName}, Long> {
 
     @Autowired
     private I${ClassName}Service service;

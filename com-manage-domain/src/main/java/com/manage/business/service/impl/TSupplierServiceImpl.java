@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @date 2021-07-17
  */
 @Service
-public class TSupplierServiceImpl extends BaseServiceImpl implements ITSupplierService {
+public class TSupplierServiceImpl extends BaseServiceImpl<TSupplier, Long> implements ITSupplierService {
     
     @Autowired
     private TSupplierMapper tSupplierMapper;

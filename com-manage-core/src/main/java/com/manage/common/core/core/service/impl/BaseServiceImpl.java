@@ -7,6 +7,7 @@ import com.manage.common.core.core.service.IService;
 import com.manage.common.core.utils.SecurityUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
      * @return
      */
     @Override
+    @Transactional
     public T selectById(Long id) {
         return getMapper().selectById(id);
     }
@@ -43,6 +45,7 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
      * @return
      */
     @Override
+    @Transactional
     public List<T> selectList(T entity) {
         return getMapper().selectList(entity);
     }
@@ -54,6 +57,7 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
      * @return 结果
      */
     @Override
+    @Transactional
     public int insert(T entity) {
         initEntry(entity);
         return getMapper().insert(entity);
@@ -66,6 +70,7 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
      * @return 结果
      */
     @Override
+    @Transactional
     public int update(T entity) {
         entity.setUpdateBy(SecurityUtils.getUsername());
         entity.setUpdateTime(new Date());
@@ -79,6 +84,7 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteByIds(Long[] ids) {
         return getMapper().deleteByIds(ids);
     }
@@ -90,6 +96,7 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteById(Long id) {
         return getMapper().deleteById(id);
     }

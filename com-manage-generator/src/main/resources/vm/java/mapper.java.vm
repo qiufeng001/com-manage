@@ -1,8 +1,6 @@
 package ${packageName}.mapper;
 
-import java.util.List;
 import com.manage.common.core.core.mapper.IMapper;
-import ${packageName}.domain.${ClassName};
 
 /**
  * ${functionName}Mapper接口

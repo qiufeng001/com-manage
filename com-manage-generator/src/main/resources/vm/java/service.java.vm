@@ -1,9 +1,6 @@
 package ${packageName}.service;
 
-import java.util.List;
-
 import com.manage.common.core.core.service.IService;
-import ${packageName}.domain.${ClassName};
 
 /**
  * ${functionName}Service接口

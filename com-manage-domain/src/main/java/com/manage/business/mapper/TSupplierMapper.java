@@ -1,5 +1,6 @@
 package com.manage.business.mapper;
 
+import com.manage.business.domain.TSupplier;
 import com.manage.common.core.core.mapper.IMapper;
 
 /**
@@ -8,6 +9,6 @@ import com.manage.common.core.core.mapper.IMapper;
  * @author zhong.h
  * @date 2021-07-17
  */
-public interface TSupplierMapper extends IMapper {
+public interface TSupplierMapper extends IMapper<TSupplier, Long> {
 
 }

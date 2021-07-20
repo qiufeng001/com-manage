@@ -11,6 +11,6 @@ import com.manage.common.core.core.mapper.IMapper;
  * @author zhong.h
  * @date 2021-07-17
  */
-public interface TGoodsMapper extends IMapper {
+public interface TGoodsMapper extends IMapper<TGoods, Long> {
 
 }

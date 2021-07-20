@@ -18,12 +18,12 @@ import com.manage.business.service.ITGoodsService;
  * @date 2021-07-17
  */
 @Service
-public class TGoodsServiceImpl extends BaseServiceImpl implements ITGoodsService {
+public class TGoodsServiceImpl extends BaseServiceImpl<TGoods, Long> implements ITGoodsService {
 
     @Autowired
     private TGoodsMapper mapper;
 
-    protected IMapper<TGoods, String> getMapper() {
+    protected IMapper getMapper() {
         return mapper;
     }
 }

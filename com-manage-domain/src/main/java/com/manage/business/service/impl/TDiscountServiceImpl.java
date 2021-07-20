@@ -1,5 +1,6 @@
 package com.manage.business.service.impl;
 
+import com.manage.business.domain.TDiscount;
 import com.manage.common.core.core.mapper.IMapper;
 import com.manage.common.core.core.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import com.manage.business.service.ITDiscountService;
  * @date 2021-07-17
  */
 @Service
-public class TDiscountServiceImpl extends BaseServiceImpl implements ITDiscountService {
+public class TDiscountServiceImpl extends BaseServiceImpl<TDiscount, Long> implements ITDiscountService {
 
     @Autowired
     private TDiscountMapper tDiscountMapper;

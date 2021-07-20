@@ -11,6 +11,6 @@ import java.util.List;
  * @author zhong.h
  * @date 2021-07-17
  */
-public interface ITSupplierService extends IService {
+public interface ITSupplierService extends IService<TSupplier, Long> {
 
 }

@@ -2,6 +2,7 @@ package com.manage.common.core.core.page;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 表格分页数据对象
@@ -30,6 +31,11 @@ public class TableDataInfo implements Serializable {
      * 消息内容
      */
     private String msg;
+
+    /***
+     * 页面所需数据集合
+     */
+    private Map<String, Object> fillData;
 
     /**
      * 表格数据对象
@@ -78,5 +84,13 @@ public class TableDataInfo implements Serializable {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public Map<String, Object> getFillData() {
+        return fillData;
+    }
+
+    public void setFillData(Map<String, Object> fillData) {
+        this.fillData = fillData;
     }
 }

@@ -1,25 +1,43 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商品名称" prop="name">
+      <el-form-item label="订单编号" prop="orderNo">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入商品名称"
+          v-model="queryParams.orderNo"
+          placeholder="请输入订单编号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="供应商" prop="supplierId">
-        <el-select v-model="queryParams.supplierId">
+      <el-form-item label="门店" prop="supplierId">
+        <el-select v-model="queryParams.shopId">
            <el-option
-             v-for="item in suppliers"
+             v-for="item in shops"
              :key="item.id"
              :label="item.name"
              :value="item.id"
            ></el-option>
          </el-select>
         </el-select>
+      </el-form-item>
+      <el-form-item label="折扣方案" prop="discountId">
+        <el-input
+          v-model="queryParams.discountId"
+          placeholder="请输入折扣方案"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="收款人" prop="payee">
+        <el-input
+          v-model="queryParams.payee"
+          placeholder="请输入收款人"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -34,7 +52,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['com:manage:add']"
+          v-hasPermi="['business:order:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -44,7 +62,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['com:manage:edit']"
+          v-hasPermi="['business:order:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -54,7 +72,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['com:manage:remove']"
+          v-hasPermi="['business:order:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -63,19 +81,22 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['com:manage:export']"
+          v-hasPermi="['business:order:export']"
         >导出</el-button>
       </el-col>
 	  <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="商品名称" align="center" prop="name" />
-      <el-table-column label="单价" align="center" prop="unitPrice"/>
-      <el-table-column label="库存" align="center" prop="number" />
-      <el-table-column label="总量" align="center" prop="total" />
-      <el-table-column label="供应商" align="center" prop="supplierName" />
+      <el-table-column label="订单id" align="center" prop="id" />
+      <el-table-column label="订单编号" align="center" prop="orderNo" />
+      <el-table-column label="门店id" align="center" prop="shopId" />
+      <el-table-column label="订单商品总数" align="center" prop="total" />
+      <el-table-column label="订单实际收额" align="center" prop="paidInAmount" />
+      <el-table-column label="订单总额" align="center" prop="totalAmount" />
+      <el-table-column label="折扣方案" align="center" prop="discountId" />
+      <el-table-column label="收款人" align="center" prop="payee" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -83,14 +104,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['com:manage:edit']"
+            v-hasPermi="['business:order:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['com:manage:remove']"
+            v-hasPermi="['business:order:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -104,27 +125,29 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改商品对话框 -->
+    <!-- 添加或修改订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入商品名称" />
+        <el-form-item label="订单编号" prop="orderNo">
+          <el-input v-model="form.orderNo" placeholder="请输入订单编号" />
         </el-form-item>
-        <el-form-item label="数量" prop="number">
-          <el-input v-model="form.number" placeholder="请输入数量" oninput ="value=value.replace(/[^0-9.]/g,'')"/>
+        <el-form-item label="门店id" prop="shopId">
+          <el-input v-model="form.shopId" placeholder="请输入门店id" />
         </el-form-item>
-        <el-form-item label="供应商" prop="supplierId">
-          <el-select v-model="form.supplierId" placeholder="请选择" width="90%">
-            <el-option
-              v-for="item in suppliers"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+        <el-form-item label="订单商品总数" prop="total">
+          <el-input v-model="form.total" placeholder="请输入订单商品总数" />
         </el-form-item>
-        <el-form-item label="单价" prop="unitPrice">
-          <el-input v-model="form.unitPrice" placeholder="请输入单价" />
+        <el-form-item label="订单实际收额" prop="paidInAmount">
+          <el-input v-model="form.paidInAmount" placeholder="请输入订单实际收额" />
+        </el-form-item>
+        <el-form-item label="订单总额" prop="totalAmount">
+          <el-input v-model="form.totalAmount" placeholder="请输入订单总额" />
+        </el-form-item>
+        <el-form-item label="折扣方案" prop="discountId">
+          <el-input v-model="form.discountId" placeholder="请输入折扣方案" />
+        </el-form-item>
+        <el-form-item label="收款人" prop="payee">
+          <el-input v-model="form.payee" placeholder="请输入收款人" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -136,10 +159,10 @@
 </template>
 
 <script>
-import { listGoods, getGoods, delGoods, addGoods, updateGoods, exportGoods,listSupplier } from "@/api/business/goods";
+import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/business/order";
 
 export default {
-  name: "Goods",
+  name: "Order",
   components: {
   },
   data() {
@@ -156,67 +179,73 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 商品表格数据
-      goodsList: [],
+      // 订单表格数据
+      orderList: [],
+      // 门店
+      shops: [],
+      discounts: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 供应商
-      suppliers: [],
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: null,
-        number: null,
+        orderNo: null,
+        shopId: null,
         total: null,
-        supplierId: null,
-        unitPrice: null,
+        paidInAmount: null,
+        totalAmount: null,
+        discountId: null,
+        payee: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        name: [
-          { required: true, message: "商品名称不能为空", trigger: "blur" }
+        orderNo: [
+          { required: true, message: "订单编号不能为空", trigger: "blur" }
         ],
-        number: [
-          { required: true, message: "数量不能为空", trigger: "blur" }
-        ],
-        total: [
-          { required: true, message: "总共消耗数量不能为空", trigger: "blur" }
+        shopId: [
+          { required: true, message: "门店id不能为空", trigger: "blur" }
         ],
       }
     };
   },
   created() {
     this.getList();
-    this.getSuppliers();
   },
   methods: {
-    /** 查询商品列表 */
+    /** 查询订单列表 */
     getList() {
       this.loading = true;
-      listGoods(this.queryParams).then(response => {
-        this.goodsList = response.rows;
+      listOrder(this.queryParams).then(response => {
+        this.orderList = response.rows;
         this.total = response.total;
+        this.shops = response.fillData.shops;
+        this.shops = response.fillData.discounts;
         this.loading = false;
       });
     },
-    getSuppliers() {
-      listSupplier().then(response => {
+    /* getShops() {
+      listShops().then(response => {
          if(response.code === 200) {
-            this.suppliers = response.data;
+            this.shops = response.data;
          }else{
             this.$alert(response.msg, "查询结果");
          }
       });
     },
+    getDiscounts() {
+      listDiscounts().then(response => {
+         if(response.code === 200) {
+            this.discounts = response.data;
+         }else{
+            this.$alert(response.msg, "查询结果");
+         }
+      });
+    }, */
     // 取消按钮
     cancel() {
       this.open = false;
@@ -226,13 +255,17 @@ export default {
     reset() {
       this.form = {
         id: null,
-        name: null,
-        number: null,
+        orderNo: null,
+        shopId: null,
         total: null,
-        supplierId: null,
-        unitPrice: null,
+        paidInAmount: null,
+        totalAmount: null,
+        discountId: null,
+        payee: null,
         createBy: null,
-        createTime: null
+        updateBy: null,
+        createTime: null,
+        updateTime: null
       };
       this.resetForm("form");
     },
@@ -254,18 +287,19 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
+      /* this.reset();
       this.open = true;
-      this.title = "添加商品";
+      this.title = "添加订单"; */
+      this.$router.push({path: '/business/orderDetail'})
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getGoods(id).then(response => {
+      getOrder(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改商品";
+        this.title = "修改订单";
       });
     },
     /** 提交按钮 */
@@ -273,13 +307,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateGoods(this.form).then(response => {
+            updateOrder(this.form).then(response => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addGoods(this.form).then(response => {
+            addOrder(this.form).then(response => {
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -291,12 +325,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除商品编号为"' + ids + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除订单编号为"' + ids + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return delGoods(ids);
+          return delOrder(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
@@ -305,12 +339,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有商品数据项?', "警告", {
+      this.$confirm('是否确认导出所有订单数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return exportGoods(queryParams);
+          return exportOrder(queryParams);
         }).then(response => {
           this.download(response.msg);
         })

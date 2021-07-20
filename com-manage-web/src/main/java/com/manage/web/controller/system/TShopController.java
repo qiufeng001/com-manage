@@ -1,10 +1,8 @@
 package com.manage.web.controller.system;
 
-import java.util.List;
-
 import com.manage.common.core.core.controller.impl.BaseController;
 import com.manage.common.core.core.service.IService;
-import com.manage.domain.domain.TShop;
+import com.manage.common.core.core.domain.entity.TShop;
 import com.manage.domain.service.ITShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

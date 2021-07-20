@@ -28,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="effectTime != null "> and effect_time = #{effectTime}</if>
             <if test="invalidTime != null "> and invalid_time = #{invalidTime}</if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="selectById" parameterType="Long" resultMap="TDiscountResult">
