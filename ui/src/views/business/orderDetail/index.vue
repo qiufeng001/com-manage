@@ -5,21 +5,20 @@
       <el-button type="primary" @click="submitForm" style="margin-left: 300px;">确 定</el-button>
       <el-button @click="reset()" type="danger">清空</el-button>
     </div>
-
-    <el-row v-for="(item, index) in order.details">
         <el-form
             :inline="true"
-            :model="order.details[index]"
-            :rules="order"
-            ref="details"
+            :model="order"
+            :rules="rules"
+            ref="orderForm"
             label-width="100px"
             class="demo-form-inline"
             size="small"
         >
-            <el-form-item label="商品" prop="goodsId">
+          <el-row v-for="(item, index) in order.details">
+            <el-form-item label="商品" prop="item">
                 <el-select
                     v-model="order.details[index].goodsId"
-                    placeholder="请选择商品"
+                    placeholder="请选择商品" style="width: 170px"
                 >
                     <el-option
                         v-for="item in goods"
@@ -29,8 +28,8 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="数量(份数)" prop="goods">
-                <el-input v-model="order.details[index].goodsNum"></el-input>
+            <el-form-item label="数量(份数)" prop="item">
+                <el-input v-model="order.details[index].goodsNum" style="width: 60px"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button
@@ -52,13 +51,12 @@
                     size="small"
                 >添加</el-button>
             </el-form-item>
+          </el-row>
         </el-form>
-    </el-row>
-
   </div>
 </template>
 <script>
-import { getInfo } from "@/api/business/orderDetail";
+import { getInfo, addOrder } from "@/api/business/orderDetail";
 
 
 export default {
@@ -67,18 +65,23 @@ export default {
       return {
           goods: [],
           discounts: [],
-          order: { details: [{}] },
+          order: { discountId: "", details: [{}] },
+          rules: {
+            goodsNum: [
+              { required: true, message: "数量必须是数字", trigger: "blur" }
+            ]
+          }
       };
   },
-  mounted() {
-  　　this.getInfo();
+  created(){
+      this.getInfo();
   },
   methods: {
     getInfo() {
       getInfo().then(response => {
         this.discounts = response.data.discounts;
         this.goods = response.data.goods;
-
+        this.order.discountId = this.discounts[0].id;
       });
     },
     // 表单重置
@@ -87,9 +90,7 @@ export default {
     },
 
     addItem() {
-        this.order.details.push({
-            goods: this.goods
-        });
+        this.order.details.push({});
     },
     // 删除播放时间
     del(index) {
@@ -97,19 +98,23 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["orderForm"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
-            updateOrder(this.form).then(response => {
+          if (this.order.id != null) {
+            updateOrder(this.order).then(response => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addOrder(this.form).then(response => {
-              this.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
+            addOrder(this.order).then(response => {
+              debugger
+              if(response.code == 200) {
+                  this.msgSuccess("新增成功");
+                  this.reset();
+              }else{
+                  this.msgError("新增失败，" + response.msg);
+              }
             });
           }
         }

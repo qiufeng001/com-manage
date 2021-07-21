@@ -52,15 +52,15 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
      * @param entity
      * @return 结果
      */
-    @Transactional
-    public Map<String, Object> addOrder(Order entity) {
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> addOrder(Order entity) throws Exception {
         Map<String, Object> result = new HashMap<>();
         synchronized (this) {
             // 查看库存是否满足
             List<OrderDetail> details = entity.getDetails();
             Map<Long, TGoods> goodsMap = new HashMap<>();
             this.genGoodsMap(details, goodsMap, result);
-            if((Integer) result.get("code") == 500) {
+            if(result.size() > 0 && (Integer) result.get("code") == 500) {
                 return result;
             }
 
@@ -85,9 +85,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         }
         // 只要有一个不对则订单无效
         if(StringUtils.isNotEmpty(errMsg.toString())) {
-            result.put("code", "500");
+            result.put("code", 500);
             String err = errMsg.toString();
-            result.put("errMsg", err.substring(0,err.length() - 1));
+            result.put("errMsg", err.substring(0,err.length() - 1) + "->库存不足，请重新下单!");
         }
     }
 
@@ -102,7 +102,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
     private void genOrder(Order entity,
                           List<OrderDetail> details,
                           Map<Long, TGoods> goodsMap,
-                          Map<String, Object> result) {
+                          Map<String, Object> result) throws Exception {
         String orderNo = super.generateId();
         try {
             // 实际总额
@@ -130,7 +130,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
             entity.setPayee(SecurityUtils.getUsername());
             entity.setPaidInAmount(paidAmount);
             entity.setTotalAmount(total_amount);
-            entity.setShopId(SecurityUtils.getLoginUser().getUser().getShop().getId());
+            entity.setShopId(SecurityUtils.getLoginUser().getUser().getShopId());
             // 保存订单
             if(entity.getId() == null) {
                 initEntry(entity);
@@ -144,6 +144,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         }catch (Exception e) {
             result.put("code", 500);
             result.put("errMsg", ErrConstants.SYSTEM_ERR);
+            throw new Exception();
         }
     }
 
@@ -154,7 +155,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
      * @return 结果
      */
     @Transactional
-    public Map<String, Object> updateOrder(Order entity) {
+    public Map<String, Object> updateOrder(Order entity) throws Exception {
         Map<String, Object> result = new HashMap<>();
         synchronized (this) {
             // 查看库存是否满足

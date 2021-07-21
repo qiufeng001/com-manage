@@ -29,6 +29,9 @@ public class TDiscount extends BaseEntity {
     @Excel(name = "折扣率")
     private Float discountRate;
 
+    @Excel(name = "状态")
+    private String status;
+
     /**
      * 生效时间
      */
@@ -86,6 +89,14 @@ public class TDiscount extends BaseEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

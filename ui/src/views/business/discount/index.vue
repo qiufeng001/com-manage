@@ -98,6 +98,16 @@
         </template>
       </el-table-column>
       <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="状态" align="center">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-value="0"
+            inactive-value="1"
+            @change="handleStatusChange(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -161,7 +171,7 @@
 </template>
 
 <script>
-import { listDiscount, getDiscount, delDiscount, addDiscount, updateDiscount, exportDiscount } from "@/api/business/discount";
+import { listDiscount, getDiscount, delDiscount, addDiscount, updateDiscount, exportDiscount, changeStatus } from "@/api/business/discount";
 
 export default {
   name: "Discount",
@@ -295,6 +305,22 @@ export default {
             });
           }
         }
+      });
+    },
+    // 状态修改
+    handleStatusChange(row) {
+      let text = row.status === "0" ? "启用" : "停用";
+      let status = row.status === "0" ? "1" : "0";
+      this.$confirm('确认要"' + text + '""' + row.name + '"折扣方案吗?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+      }).then(function() {
+          return changeStatus(row.id, status);
+      }).then(() => {
+          this.msgSuccess(text + "成功");
+      }).catch(function() {
+          row.status = row.status === "0" ? "1" : "0";
       });
     },
     /** 删除按钮操作 */

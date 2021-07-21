@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTDiscountVo">
-        select name, discount_rate, effect_time, invalid_time, create_by, update_by, create_time, update_time, id from t_discount
+        select name, discount_rate, effect_time, invalid_time, status, create_by, update_by, create_time, update_time, id from t_discount
     </sql>
 
     <select id="selectList" parameterType="TDiscount" resultMap="TDiscountResult">
@@ -27,6 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="discountRate != null "> and discount_rate = #{discountRate}</if>
             <if test="effectTime != null "> and effect_time = #{effectTime}</if>
             <if test="invalidTime != null "> and invalid_time = #{invalidTime}</if>
+            <if test="status != null "> and status = #{status}</if>
         </where>
         order by create_time desc
     </select>
@@ -67,7 +68,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="discountRate != null">discount_rate = #{discountRate},</if>
             <if test="effectTime != null">effect_time = #{effectTime},</if>
             <if test="invalidTime != null">invalid_time = #{invalidTime},</if>
-            <if test="invalidTime == null">invalid_time = null,</if>
+            <if test="invalidTime == null and status == null">invalid_time = null,</if>
+            <if test="status != null">status = #{status},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

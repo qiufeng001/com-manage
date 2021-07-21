@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface IOrderService extends IService<Order, Long> {
 
-    public Map<String, Object> addOrder(Order entity);
+    public Map<String, Object> addOrder(Order entity) throws Exception;
 
-    public Map<String, Object> updateOrder(Order entity);
+    public Map<String, Object> updateOrder(Order entity) throws Exception;
 }

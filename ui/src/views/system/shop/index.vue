@@ -137,8 +137,16 @@
         <el-form-item label="店名" prop="shopName">
           <el-input v-model="form.shopName" placeholder="请输入店铺名称" />
         </el-form-item>
-        <el-form-item label="负责人" prop="headName">
-          <el-input v-model="form.headName" placeholder="请输入负责人名称" />
+        <el-form-item label="负责人" prop="headId">
+          <el-select v-model="form.headId" placeholder="请选择">
+              <el-option
+                v-for="item in users"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-form-item>
         <el-form-item label="联系电话 " prop="contactPhoneNumber">
           <el-input v-model="form.contactPhoneNumber" placeholder="请输入店铺联系电话 " />
@@ -187,6 +195,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      users: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -241,6 +250,7 @@ export default {
       listShop(this.queryParams).then(response => {
         this.shopList = response.rows;
         this.total = response.total;
+        this.users = response.fillData.users;
         this.loading = false;
       });
     },

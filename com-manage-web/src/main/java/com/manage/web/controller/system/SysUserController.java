@@ -7,6 +7,7 @@ import com.manage.common.core.core.controller.AbstractController;
 import com.manage.common.core.core.domain.AjaxResult;
 import com.manage.common.core.core.domain.entity.SysRole;
 import com.manage.common.core.core.domain.entity.SysUser;
+import com.manage.common.core.core.domain.entity.TShop;
 import com.manage.common.core.core.domain.model.LoginUser;
 import com.manage.common.core.core.page.TableDataInfo;
 import com.manage.common.core.core.service.IService;
@@ -18,6 +19,7 @@ import com.manage.common.core.utils.poi.ExcelUtil;
 import com.manage.domain.service.ISysPostService;
 import com.manage.domain.service.ISysRoleService;
 import com.manage.domain.service.ISysUserService;
+import com.manage.domain.service.ITShopService;
 import com.manage.framework.web.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +27,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +52,9 @@ public class SysUserController extends AbstractController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private ITShopService shopService;
+
     /**
      * 获取用户列表
      */
@@ -56,7 +63,11 @@ public class SysUserController extends AbstractController {
     public TableDataInfo list(SysUser user) {
         startPage();
         List<SysUser> list = userService.selectUserList(user);
-        return getDataTable(list);
+        TableDataInfo tableDataInfo = getDataTable(list);
+        Map<String, Object> fillDataMap = new HashMap<>();
+        fillDataMap.put("shops", shopService.selectList(new TShop()));
+        tableDataInfo.setFillData(fillDataMap);
+        return tableDataInfo;
     }
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)

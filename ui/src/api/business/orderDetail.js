@@ -7,3 +7,21 @@ export function getInfo() {
     method: 'get'
   })
 }
+
+// 新增订单
+export function addOrder(data) {
+  return request({
+    url: '/business/order/addOrder',
+    method: 'post',
+    data: data
+  })
+}
+
+// 修改订单
+export function updateOrder(data) {
+  return request({
+    url: '/business/order/updateOrder',
+    method: 'put',
+    data: data
+  })
+}

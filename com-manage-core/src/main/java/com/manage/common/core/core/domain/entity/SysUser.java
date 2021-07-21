@@ -126,7 +126,7 @@ public class SysUser extends BaseEntity {
      */
     private Long[] postIds;
 
-    private TShop shop;
+    private Long shopId;
 
     public SysUser() {
 
@@ -296,12 +296,12 @@ public class SysUser extends BaseEntity {
         this.postIds = postIds;
     }
 
-    public TShop getShop() {
-        return shop;
+    public Long getShopId() {
+        return shopId;
     }
 
-    public void setShop(TShop shop) {
-        this.shop = shop;
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
     @Override

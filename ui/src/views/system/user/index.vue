@@ -292,6 +292,20 @@
         </el-row>
         <el-row>
           <el-col :span="24">
+            <el-form-item label="所属门店">
+              <el-select v-model="form.shopId" multiple placeholder="请选择">
+                <el-option
+                  v-for="item in shops"
+                  :key="item.id"
+                  :label="item.shopName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="备注">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
@@ -383,6 +397,7 @@ export default {
       postOptions: [],
       // 角色选项
       roleOptions: [],
+      shops: [],
       // 表单参数
       form: {},
       defaultProps: {
@@ -467,6 +482,7 @@ export default {
       listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
           this.userList = response.rows;
           this.total = response.total;
+          this.shops = response.fillData.shops;
           this.loading = false;
         }
       );

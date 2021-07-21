@@ -51,3 +51,17 @@ export function exportDiscount(query) {
     params: query
   })
 }
+
+
+// 用户状态修改
+export function changeStatus(id, status) {
+  const data = {
+    id,
+    status
+  }
+  return request({
+    url: '/business/discount/updateStatus',
+    method: 'put',
+    data: data
+  })
+}
