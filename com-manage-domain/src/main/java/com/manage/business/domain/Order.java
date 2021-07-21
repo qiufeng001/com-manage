@@ -33,11 +33,13 @@ public class Order extends BaseEntity {
     @Excel(name = "门店id")
     private Long shopId;
 
+    private String shopName;
+
     /**
      * 订单商品总数
      */
     @Excel(name = "订单商品总数")
-    private Long total;
+    private Integer total;
 
     /**
      * 订单实际收额
@@ -56,6 +58,8 @@ public class Order extends BaseEntity {
      */
     @Excel(name = "折扣方案")
     private Long discountId;
+
+    private String discountName;
 
     /**
      * 收款人
@@ -92,11 +96,11 @@ public class Order extends BaseEntity {
         return shopId;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
-    public Long getTotal() {
+    public Integer getTotal() {
         return total;
     }
 
@@ -138,6 +142,22 @@ public class Order extends BaseEntity {
 
     public void setDetails(List<OrderDetail> details) {
         this.details = details;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getDiscountName() {
+        return discountName;
+    }
+
+    public void setDiscountName(String discountName) {
+        this.discountName = discountName;
     }
 
     @Override

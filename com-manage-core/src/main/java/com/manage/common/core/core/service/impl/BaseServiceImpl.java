@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -120,5 +121,9 @@ public abstract class BaseServiceImpl<T extends IEntity, K> implements IService<
     @SuppressWarnings("unchecked")
     protected String generateId() {
         return  UUID.randomUUID().toString();
+    }
+
+    protected String random() {
+        return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + Math.random();
     }
 }

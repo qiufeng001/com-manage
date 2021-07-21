@@ -23,8 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectList" parameterType="TShop" resultMap="TShopResult">
-        select t.id, t.shop_name, t.head_id, u.name as head_name, t.contact_phone_number, t.address, t.create_by, t.update_by, t.create_time, t.update_time, t.remark from t_shop
-        JOIN t_user u on u.id = t.head_id
+        select t.id, t.shop_name, t.head_id, u.nick_name as head_name, t.contact_phone_number, t.address, t.create_by, t.update_by, t.create_time, t.update_time, t.remark from t_shop t
+        JOIN t_user u on u.user_id = t.head_id
         <where>
             <if test="shopName != null  and shopName != ''"> and shop_name like concat('%', #{shopName}, '%')</if>
             <if test="headId != null "> and head_id = #{headId}</if>

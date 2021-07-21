@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="orderNo"    column="order_no"    />
         <result property="shopId"    column="shop_id"    />
+        <result property="shopName"    column="shop_name"    />
         <result property="total"    column="total"    />
         <result property="paidInAmount"    column="paid_in_amount"    />
         <result property="totalAmount"    column="total_amount"    />
@@ -19,13 +20,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="OrderDetail" id="OrderDetailResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="goods_num"    column="goods_num"    />
+    </resultMap>
+
+
     <sql id="selectOrderVo">
-        select id, order_no, shop_id, total, paid_in_amount, total_amount, discount_id, payee, create_by, update_by, create_time, update_time from t_order
+        select t.id, t.order_no, t.shop_id, s.shop_name, t.total, t.paid_in_amount, t.total_amount, t.discount_id, d.name as discountName, t.payee, t.create_by, t.update_by, t.create_time, t.update_time from t_order t
+        join t_shop s on s.id = t.shop_id
+        join t_discount d on d.id = t.discount_id
     </sql>
 
     <select id="selectList" parameterType="Order" resultMap="OrderResult">
         <include refid="selectOrderVo"/>
-        <where>  
+        <where>
             <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
             <if test="shopId != null "> and shop_id = #{shopId}</if>
             <if test="total != null "> and total = #{total}</if>
@@ -35,10 +46,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payee != null  and payee != ''"> and payee = #{payee}</if>
         </where>
     </select>
-    
+
+    <select id="selectDetails" parameterType="OrderDetail" resultMap="OrderDetailResult">
+        select * from t_order_detail t where t.order_no = #{orderNo}
+    </select>
+
     <select id="selectById" parameterType="Long" resultMap="OrderResult">
         <include refid="selectOrderVo"/>
-        where id = #{id}
+        where t.id = #{id}
     </select>
 
     <insert id="insert" parameterType="Order" useGeneratedKeys="true" keyProperty="id">

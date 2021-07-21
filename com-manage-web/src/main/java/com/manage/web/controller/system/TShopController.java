@@ -49,7 +49,7 @@ public class TShopController extends BaseController<TShop, Long> {
         TableDataInfo tableDataInfo = getDataTable(list);
         Map<String, Object> fillDataMap = new HashMap<>();
         SysUser user = new SysUser();
-        user.setStatus("1");
+        user.setStatus("0");
         fillDataMap.put("users", userService.selectUserList(user));
         tableDataInfo.setFillData(fillDataMap);
         return tableDataInfo;

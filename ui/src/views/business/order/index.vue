@@ -89,15 +89,17 @@
 	  <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="orderList"
+          @selection-change="handleSelectionChange"
+          @row-dblclick="dbSelected">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单id" align="center" prop="id" />
       <el-table-column label="订单编号" align="center" prop="orderNo" />
-      <el-table-column label="门店id" align="center" prop="shopId" />
+      <el-table-column label="门店" align="center" prop="shopName" />
       <el-table-column label="订单商品总数" align="center" prop="total" />
-      <el-table-column label="订单实际收额" align="center" prop="paidInAmount" />
-      <el-table-column label="订单总额" align="center" prop="totalAmount" />
-      <el-table-column label="折扣方案" align="center" prop="discountId" />
+      <el-table-column label="实际收额(元)" align="center" prop="paidInAmount" />
+      <el-table-column label="订单总额(元)" align="center" prop="totalAmount" />
+      <el-table-column label="折扣方案" align="center" prop="discountName" />
       <el-table-column label="收款人" align="center" prop="payee" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -161,7 +163,7 @@
 </template>
 
 <script>
-import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder } from "@/api/business/order";
+import { listOrder, getOrder, delOrder, addOrder, updateOrder, exportOrder,getDetails } from "@/api/business/order";
 
 export default {
   name: "Order",
@@ -230,24 +232,12 @@ export default {
         this.loading = false;
       });
     },
-    /* getShops() {
-      listShops().then(response => {
-         if(response.code === 200) {
-            this.shops = response.data;
-         }else{
-            this.$alert(response.msg, "查询结果");
-         }
+    dbSelected(row) {
+      getDetails(row.orderNo).then(res => {
+
       });
     },
-    getDiscounts() {
-      listDiscounts().then(response => {
-         if(response.code === 200) {
-            this.discounts = response.data;
-         }else{
-            this.$alert(response.msg, "查询结果");
-         }
-      });
-    }, */
+
     // 取消按钮
     cancel() {
       this.open = false;

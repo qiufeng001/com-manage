@@ -4,6 +4,8 @@ import com.manage.business.domain.Order;
 import com.manage.business.domain.OrderDetail;
 import com.manage.common.core.core.mapper.IMapper;
 
+import java.util.List;
+
 /**
  * 订单Mapper接口
  *
@@ -13,4 +15,5 @@ import com.manage.common.core.core.mapper.IMapper;
 public interface OrderMapper extends IMapper<Order, Long> {
     int insertDetail(OrderDetail  detail);
     int deleteDetailByOrderNo(String orderNo);
+    List<OrderDetail> selectDetails(String orderNo);
 }

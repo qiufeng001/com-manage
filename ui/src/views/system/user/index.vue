@@ -293,7 +293,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="所属门店">
-              <el-select v-model="form.shopId" multiple placeholder="请选择">
+              <el-select v-model="form.shopId" placeholder="请选择">
                 <el-option
                   v-for="item in shops"
                   :key="item.id"
@@ -581,6 +581,7 @@ export default {
         this.roleOptions = response.roles;
         this.form.postIds = response.postIds;
         this.form.roleIds = response.roleIds;
+        this.form.shopId = response.data.shopId;
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";

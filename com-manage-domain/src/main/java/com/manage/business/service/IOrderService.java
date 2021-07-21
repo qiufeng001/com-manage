@@ -2,8 +2,10 @@ package com.manage.business.service;
 
 
 import com.manage.business.domain.Order;
+import com.manage.business.domain.OrderDetail;
 import com.manage.common.core.core.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,4 +19,6 @@ public interface IOrderService extends IService<Order, Long> {
     public Map<String, Object> addOrder(Order entity) throws Exception;
 
     public Map<String, Object> updateOrder(Order entity) throws Exception;
+
+    public Order getDetails(Order order);
 }

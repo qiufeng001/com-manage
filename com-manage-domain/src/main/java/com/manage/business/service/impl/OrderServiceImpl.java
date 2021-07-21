@@ -70,6 +70,37 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         return result;
     }
 
+    /**
+     * 修改
+     *
+     * @param entity
+     * @return 结果
+     */
+    @Transactional
+    public Map<String, Object> updateOrder(Order entity) throws Exception {
+        Map<String, Object> result = new HashMap<>();
+        synchronized (this) {
+            // 查看库存是否满足
+            List<OrderDetail> details = entity.getDetails();
+            Map<Long, TGoods> goodsMap = new HashMap<>();
+            this.genGoodsMap(details, goodsMap, result);
+            if((Integer) result.get("code") == 500) {
+                return result;
+            }
+            // 验证成功后，先删除所有订单明细，重新生成
+            mapper.deleteDetailByOrderNo(entity.getOrderNo());
+            this.genOrder(entity, details, goodsMap, result);
+        }
+        return result;
+    }
+
+    @Override
+    public Order getDetails(Order order) {
+        Order result = mapper.selectById(order.getId());
+        result.getDetails().addAll(mapper.selectDetails(order.getOrderNo()));
+        return result;
+    }
+
     private void genGoodsMap(List<OrderDetail> details,
                                Map<Long, TGoods> goodsMap,
                                Map<String, Object> result) {
@@ -107,6 +138,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         try {
             // 实际总额
             Float total_amount = 0F;
+            Integer total = 0;
             for(OrderDetail detail : details) {
                 TGoods goods = goodsMap.get(detail.getGoodsId());
                 // 减库存
@@ -118,6 +150,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
                 total_amount += goods.getUnitPrice() * detail.getGoodsNum();
                 // 生成订单明细
                 detail.setOrderNo(orderNo);
+                total += detail.getGoodsNum();
                 mapper.insertDetail(detail);
             }
             // 生成订单
@@ -130,6 +163,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
             entity.setPayee(SecurityUtils.getUsername());
             entity.setPaidInAmount(paidAmount);
             entity.setTotalAmount(total_amount);
+            entity.setTotal(total);
             entity.setShopId(SecurityUtils.getLoginUser().getUser().getShopId());
             // 保存订单
             if(entity.getId() == null) {
@@ -146,29 +180,5 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
             result.put("errMsg", ErrConstants.SYSTEM_ERR);
             throw new Exception();
         }
-    }
-
-    /**
-     * 修改
-     *
-     * @param entity
-     * @return 结果
-     */
-    @Transactional
-    public Map<String, Object> updateOrder(Order entity) throws Exception {
-        Map<String, Object> result = new HashMap<>();
-        synchronized (this) {
-            // 查看库存是否满足
-            List<OrderDetail> details = entity.getDetails();
-            Map<Long, TGoods> goodsMap = new HashMap<>();
-            this.genGoodsMap(details, goodsMap, result);
-            if((Integer) result.get("code") == 500) {
-                return result;
-            }
-            // 验证成功后，先删除所有订单明细，重新生成
-            mapper.deleteDetailByOrderNo(entity.getOrderNo());
-            this.genOrder(entity, details, goodsMap, result);
-        }
-        return result;
     }
 }

@@ -98,7 +98,6 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="店铺地址" align="center" prop="id" />
       <el-table-column label="店铺名称" align="center" prop="shopName" />
-      <el-table-column label="负责人id" align="center" prop="headId" />
       <el-table-column label="负责人名称" align="center" prop="headName" />
       <el-table-column label="店铺联系电话 " align="center" prop="contactPhoneNumber" />
       <el-table-column label="店铺地址" align="center" prop="address" />
@@ -141,9 +140,9 @@
           <el-select v-model="form.headId" placeholder="请选择">
               <el-option
                 v-for="item in users"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+                :key="item.userId"
+                :label="item.nickName"
+                :value="item.userId"
               ></el-option>
             </el-select>
           </el-form-item>

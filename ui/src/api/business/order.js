@@ -75,3 +75,15 @@ export function getInfo() {
     method: 'get'
   })
 }
+
+export function getDetails(id, orderNo) {
+   const data = {
+     id,
+     orderNo
+   }
+    return getDetails({
+      url: '/business/order/getDetails',
+      method: 'post',
+      data: data
+    })
+}
