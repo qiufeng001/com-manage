@@ -22,7 +22,11 @@ public class ReportServiceImpl implements IReportService {
         Map<String, Object> result = new HashMap<>();
         try {
             List<OrderReportDto> orderReportDtos = reportMapper.getOrderReport(params);
-
+            // 报表类别，总的， 门店
+            String reportType = this.genReportType((String) params.get("reportType"));
+            // 时间聚合
+            String timeType= (String) params.get("");
+            String groupBy = "";
 
             result.put("orderReport", orderReportDtos);
             result.put("code", 200);
@@ -32,5 +36,15 @@ public class ReportServiceImpl implements IReportService {
             result.put("errMsg", "系统异常");
         }
         return result;
+    }
+
+    private String genReportType(String val) {
+        switch (val) {
+            case "":
+
+                return "";
+            default:
+                return "";
+        }
     }
 }
