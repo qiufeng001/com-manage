@@ -4,7 +4,6 @@
       <el-col :sm="24" :lg="12">
         <blockquote class="text-primary" style="font-size: 14px">
 
-
         </blockquote>
       </el-col>
       <el-col :sm="24" :lg="12">
@@ -73,16 +72,26 @@
     </el-row>
   </div>
 </template>
-
 <script>
+import { getCodeImg } from "@/api/home.js";
 
 export default {
   name: "index",
-
+  data() {
+    return {
+      orderReport: []
+    };
+  },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
+    // 获取订单报表
+    orderReport() {
+      listGoods(this.queryParams).then(res => {
+        this.orderReport = res.data.orderReport;
+      });
+    }
   }
 
 };

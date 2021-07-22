@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="total"    column="total"    />
         <result property="paidInAmount"    column="paid_in_amount"    />
         <result property="totalAmount"    column="total_amount"    />
+        <result property="preferentialAmouont"    column="preferential_amouont"    />
         <result property="discountId"    column="discount_id"    />
         <result property="payee"    column="payee"    />
         <result property="createBy"    column="create_by"    />
@@ -24,12 +25,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="orderNo"    column="order_no"    />
         <result property="goodsId"    column="goods_id"    />
-        <result property="goods_num"    column="goods_num"    />
+        <result property="goodsNum"    column="goods_num"    />
+        <result property="goodsName"    column="goods_name"    />
+        <result property="amount"    column="amount"    />
+        <result property="unitPrice"    column="unit_price" />
     </resultMap>
 
 
     <sql id="selectOrderVo">
-        select t.id, t.order_no, t.shop_id, s.shop_name, t.total, t.paid_in_amount, t.total_amount, t.discount_id, d.name as discountName, t.payee, t.create_by, t.update_by, t.create_time, t.update_time from t_order t
+        select t.id, t.order_no, t.shop_id, s.shop_name, t.total, t.paid_in_amount, t.total_amount,(t.total_amount - t.paid_in_amount) as preferential_amouont, t.discount_id, d.name as discountName, t.payee, t.create_by, t.update_by, t.create_time, t.update_time from t_order t
         join t_shop s on s.id = t.shop_id
         join t_discount d on d.id = t.discount_id
     </sql>
@@ -48,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectDetails" parameterType="OrderDetail" resultMap="OrderDetailResult">
-        select * from t_order_detail t where t.order_no = #{orderNo}
+        select t.*,g.name as goods_name,(g.unit_price * t.goods_num) as amount,g.unit_price from t_order_detail t join t_goods g on g.id = t.goods_id where t.order_no = #{orderNo}
     </select>
 
     <select id="selectById" parameterType="Long" resultMap="OrderResult">
@@ -119,7 +123,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteById" parameterType="Long">
-        delete from t_order where id = #{id}
+        delete from t_order_detail where order_no = (select order_no from t_order where id= #{id});
+        delete from t_order where id = #{id};
+
     </delete>
 
     <delete id="deleteDetailByOrderNo" parameterType="Long">
@@ -127,6 +133,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteByIds" parameterType="String">
+        delete from t_order_detail where order_no in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            select order_no from t_order where id= #{id}
+        </foreach>;
         delete from t_order where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

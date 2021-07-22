@@ -97,7 +97,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
     @Override
     public Order getDetails(Order order) {
         Order result = mapper.selectById(order.getId());
-        result.getDetails().addAll(mapper.selectDetails(order.getOrderNo()));
+        result.setDetails(mapper.selectDetails(order.getOrderNo()));
         return result;
     }
 
@@ -154,7 +154,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
                 mapper.insertDetail(detail);
             }
             // 生成订单
-            TDiscount discount = discountMapper.selectById(entity.getDiscountId());
+            TDiscount query = new TDiscount();
+            query.setStatus("1");
+            List<TDiscount> discounts = discountMapper.selectList(query);
+            TDiscount discount = discounts.get(0);
             // 实收金额
             Float paidAmount = total_amount * discount.getDiscountRate();
 

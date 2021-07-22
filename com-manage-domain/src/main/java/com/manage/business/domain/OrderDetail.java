@@ -15,6 +15,13 @@ public class OrderDetail extends BaseEntity {
     /** 订单数量 */
     private Integer goodsNum;
 
+    /** 商品名称 */
+    private String goodsName;
+
+    private Float amount;
+
+    private Float unitPrice;
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -45,5 +52,29 @@ public class OrderDetail extends BaseEntity {
 
     public void setGoodsNum(Integer goodsNum) {
         this.goodsNum = goodsNum;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+
+    public Float getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Float unitPrice) {
+        this.unitPrice = unitPrice;
     }
 }

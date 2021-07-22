@@ -49,7 +49,7 @@ public class TGoods extends BaseEntity {
      * 单价
      */
     @Excel(name = "单价")
-    private Long unitPrice;
+    private Float unitPrice;
 
     public void setId(Long id) {
         this.id = id;
@@ -91,11 +91,11 @@ public class TGoods extends BaseEntity {
         return supplierId;
     }
 
-    public void setUnitPrice(Long unitPrice) {
+    public void setUnitPrice(Float unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public Long getUnitPrice() {
+    public Float getUnitPrice() {
         return unitPrice;
     }
 

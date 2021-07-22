@@ -93,7 +93,6 @@
           @selection-change="handleSelectionChange"
           @row-dblclick="dbSelected">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="订单id" align="center" prop="id" />
       <el-table-column label="订单编号" align="center" prop="orderNo" />
       <el-table-column label="门店" align="center" prop="shopName" />
       <el-table-column label="订单商品总数" align="center" prop="total" />
@@ -130,34 +129,44 @@
     />
 
     <!-- 添加或修改订单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="订单编号" prop="orderNo">
-          <el-input v-model="form.orderNo" placeholder="请输入订单编号" />
-        </el-form-item>
-        <el-form-item label="门店id" prop="shopId">
-          <el-input v-model="form.shopId" placeholder="请输入门店id" />
-        </el-form-item>
-        <el-form-item label="订单商品总数" prop="total">
-          <el-input v-model="form.total" placeholder="请输入订单商品总数" />
-        </el-form-item>
-        <el-form-item label="订单实际收额" prop="paidInAmount">
-          <el-input v-model="form.paidInAmount" placeholder="请输入订单实际收额" />
-        </el-form-item>
-        <el-form-item label="订单总额" prop="totalAmount">
-          <el-input v-model="form.totalAmount" placeholder="请输入订单总额" />
-        </el-form-item>
-        <el-form-item label="折扣方案" prop="discountId">
-          <el-input v-model="form.discountId" placeholder="请输入折扣方案" />
-        </el-form-item>
-        <el-form-item label="收款人" prop="payee">
-          <el-input v-model="form.payee" placeholder="请输入收款人" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
+    <el-dialog :title="title" :visible.sync="open" width="70%" append-to-body>
+        <table class="orderClass">
+           <tr>
+             <td width="10%">门店:</td>
+             <td width="10%">{{this.orderVo.shopName}}</td>
+             <td width="10%">订单总数:</td>
+             <td width="10%">{{this.orderVo.total}}</td>
+             <td width="10%">实收：</td>
+             <td width="15%">{{this.orderVo.paidInAmount}}元</td>
+             <td width="10%">实际金额:</td>
+             <td width="15%">{{this.orderVo.totalAmount}}元</td>
+           </tr>
+           <tr>
+             <td>折扣方案</td>
+             <td>{{this.orderVo.discountName}}</td>
+             <td>收款人</td>
+             <td>{{this.orderVo.payee}}</td>
+             <td>订单号</td>
+             <td colspan="3">{{this.orderVo.orderNo}}</td>
+           </tr>
+        </table>
+        <br />
+        <el-table v-loading="loading" :data="orderVo.details" class="details-class">
+          <el-table-column label="商品" align="center" prop="goodsName" />
+          <el-table-column label="单价" align="center" prop="unitPrice" />
+          <el-table-column label="数量(份数)" align="center" prop="goodsNum" />
+          <el-table-column label="金额(元)" align="center" prop="amount" />
+        </el-table>
+        <table class="orderClass">
+           <tr>
+             <td>
+               <span style="width:30px;margin-left: 55px;">商品数量：{{this.orderVo.goodsNum}}</span>
+               <span style="width:30px;margin-left: 100px;">实际金额：{{this.orderVo.totalAmount}}元</span>
+               <span style="width:30px;margin-left: 100px;color: red;">实收金额：{{this.orderVo.paidInAmount}}元</span>
+                <span style="width:30px;margin-left: 100px;">以优惠：{{this.orderVo.preferentialAmouont}}元</span>
+             </td>
+           </tr>
+        </table>
     </el-dialog>
   </div>
 </template>
@@ -192,6 +201,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      orderVo: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -233,8 +243,10 @@ export default {
       });
     },
     dbSelected(row) {
-      getDetails(row.orderNo).then(res => {
-
+      getDetails(row).then(res => {
+          this.open = true;
+          this.title = "订单明细查看";
+          this.orderVo = res.data;
       });
     },
 
@@ -344,3 +356,15 @@ export default {
   }
 };
 </script>
+<style>
+  .orderClass {
+    width: 90%;
+  }
+  .el-dialog__header {
+    text-align: center;
+  }
+  .details-class {
+    max-height: 310px;
+    overflow: auto;
+  }
+</style>

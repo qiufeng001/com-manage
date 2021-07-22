@@ -72,6 +72,10 @@ public class Order extends BaseEntity {
      */
     private List<OrderDetail> details;
 
+    private Integer goodsNum;
+
+    private Float preferentialAmouont;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -158,6 +162,18 @@ public class Order extends BaseEntity {
 
     public void setDiscountName(String discountName) {
         this.discountName = discountName;
+    }
+
+    public Integer getGoodsNum() {
+        return this.getDetails() == null ? 0 : this.getDetails().size();
+    }
+
+    public Float getPreferentialAmouont() {
+        return preferentialAmouont;
+    }
+
+    public void setPreferentialAmouont(Float preferentialAmouont) {
+        this.preferentialAmouont = preferentialAmouont;
     }
 
     @Override

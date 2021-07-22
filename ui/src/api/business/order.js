@@ -76,12 +76,12 @@ export function getInfo() {
   })
 }
 
-export function getDetails(id, orderNo) {
+export function getDetails(row) {
    const data = {
-     id,
-     orderNo
+     id: row.id,
+     orderNo: row.orderNo
    }
-    return getDetails({
+    return request({
       url: '/business/order/getDetails',
       method: 'post',
       data: data

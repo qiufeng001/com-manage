@@ -82,4 +82,9 @@ public class OrderController extends BaseController<Order, Long> {
         result.put("discounts",  discounts == null ? new ArrayList<>() : Arrays.asList(discounts.get(0)));
         return AjaxResult.success(result);
     }
+
+    @PostMapping("/getDetails")
+    public AjaxResult getDetails(@RequestBody Order entity) {
+        return AjaxResult.success(service.getDetails(entity));
+    }
 }
