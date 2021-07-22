@@ -2,9 +2,7 @@
   <div class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12">
-        <blockquote class="text-primary" style="font-size: 14px">
-
-        </blockquote>
+        <div id="pieChart" :style="{width: '100%', height: '300px'}"></div>
       </el-col>
       <el-col :sm="24" :lg="12">
         <h4 class="text-danger" style="font-size: 14px">
@@ -73,27 +71,81 @@
   </div>
 </template>
 <script>
-import { getCodeImg } from "@/api/home.js";
+import * as $echarts from 'echarts';
+import { reportData } from "@/api/home";
+
 
 export default {
   name: "index",
   data() {
     return {
-      orderReport: []
+      orderReport: [],
+      pieData: []
     };
+  },
+  mounted(){
+    this.pieReportData();
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
     // 获取订单报表
-    orderReport() {
-      listGoods(this.queryParams).then(res => {
-        this.orderReport = res.data.orderReport;
+    pieReportData() {
+      const params = {"reportType": "total", "timeType": "all"}
+      reportData(params).then(res => {
+        var orderReport = res.orderReport;
+        if(orderReport == null || orderReport == undefined) {
+          return;
+        }
+        var data = new Array();
+        for(var i = 0;i < orderReport.length;i++) {
+            var dataItem = {};
+            dataItem.value = "实收" + orderReport[i].paidInAmount + "元, 实际总额" + orderReport[i].totalAmount + "元, 优惠" + orderReport[i].discountAmount + "元";
+            dataItem.name = orderReport[i].shopName;
+            data.push(dataItem);
+        }
+        this.pieReport(data);
       });
+    },
+    // 饼图
+    pieReport(data){
+      console.log(data)
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(document.getElementById('pieChart'))
+      // 绘制图表
+      var option = {
+        title: {
+            text: '店铺营收情况',
+            subtext: '店铺数据',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+        },
+        series: [
+            {
+                name: '店铺数据',
+                type: 'pie',
+                radius: '50%',
+                data: data,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+      };
+      myChart.setOption(option);
     }
   }
-
 };
 </script>
 

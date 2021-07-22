@@ -1,7 +1,9 @@
+import request from '@/utils/request'
+
 // 获取订单报表
-export const getRouters = (query) => {
+export function reportData(query) {
   return request({
-    url: '/home/orderReport',
+    url: '/business/report/orderReport',
     method: 'post',
     data: query
   })

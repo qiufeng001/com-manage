@@ -19,14 +19,19 @@ public class ReportServiceImpl implements IReportService {
 
     @Override
     public Map<String, Object> getOrderReport(Map<String, Object> params) {
+        Map<String, Object> query = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
         try {
-            List<OrderReportDto> orderReportDtos = reportMapper.getOrderReport(params);
             // 报表类别，总的， 门店
             String reportType = this.genReportType((String) params.get("reportType"));
             // 时间聚合
             String timeType= (String) params.get("");
-            String groupBy = "";
+
+            String groupBy = " group by " + reportType;
+
+            query.put("groupBy", groupBy);
+            List<OrderReportDto> orderReportDtos = reportMapper.getOrderReport(query);
+
 
             result.put("orderReport", orderReportDtos);
             result.put("code", 200);
@@ -40,9 +45,8 @@ public class ReportServiceImpl implements IReportService {
 
     private String genReportType(String val) {
         switch (val) {
-            case "":
-
-                return "";
+            case "total":
+                return " shop ";
             default:
                 return "";
         }
