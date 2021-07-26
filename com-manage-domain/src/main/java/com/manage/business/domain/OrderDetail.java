@@ -22,6 +22,8 @@ public class OrderDetail extends BaseEntity {
 
     private Float unitPrice;
 
+    private Float costAmount;
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -76,5 +78,13 @@ public class OrderDetail extends BaseEntity {
 
     public void setUnitPrice(Float unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public Float getCostAmount() {
+        return costAmount;
+    }
+
+    public void setCostAmount(Float costAmount) {
+        this.costAmount = costAmount;
     }
 }

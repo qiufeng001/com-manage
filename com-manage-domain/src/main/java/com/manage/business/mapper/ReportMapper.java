@@ -14,4 +14,6 @@ public interface ReportMapper {
      */
     List<OrderReportDto> getOrderReport(Map<String, Object> params);
 
+    List<OrderReportDto> getSaleReport(Map<String, Object> params);
+
 }

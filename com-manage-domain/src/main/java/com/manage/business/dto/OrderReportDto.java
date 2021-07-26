@@ -2,6 +2,7 @@ package com.manage.business.dto;
 
 public class OrderReportDto {
     private String shopName;
+    private String name;
 
     /** 总应收额 */
     private Float totalAmount;
@@ -11,6 +12,11 @@ public class OrderReportDto {
 
     /** 总优惠额 */
     private Float discountAmount;
+
+    /** 净利润 */
+    private Float netProfit;
+
+    private Integer total;
 
     public String getShopName() {
         return shopName;
@@ -42,5 +48,29 @@ public class OrderReportDto {
 
     public void setDiscountAmount(Float discountAmount) {
         this.discountAmount = discountAmount;
+    }
+
+    public Float getNetProfit() {
+        return netProfit;
+    }
+
+    public void setNetProfit(Float netProfit) {
+        this.netProfit = netProfit;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

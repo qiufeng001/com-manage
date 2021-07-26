@@ -6,17 +6,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="com.manage.business.dto.OrderReportDto" id="OrderReportResult">
         <result property="shopName"    column="shop_name"    />
+        <result property="name"    column="name"    />
         <result property="totalAmount"    column="total_amount"    />
         <result property="paidInAmount"    column="paid_in_amount"    />
         <result property="discountAmount"    column="discount_amount"    />
+        <result property="total"    column="total"    />
+        <result property="netProfit"    column="net_profit"    />
     </resultMap>
 
     <select id="getOrderReport" parameterType="map" resultMap="OrderReportResult">
         SELECT
             s.shop_name, sum(o.total_amount) as total_amount,
             sum(o.paid_in_amount) as paid_in_amount,
-            sum(o.total_amount - o.paid_in_amount) as discount_amount
+            sum(o.total_amount - o.paid_in_amount) as discount_amount,
+            sum(o.paid_in_amount - o.cost_amount) as net_profit
         FROM t_order o join t_shop s on s.id = o.shop_id
+        where 1 = 1
+        <if test="shopId != null  and shopId != ''"> and s.id = #{shopId}</if>
         GROUP BY o.shop_id
+    </select>
+
+    <select id="getSaleReport" parameterType="map" resultMap="OrderReportResult">
+        SELECT g.`name`, sum( d.goods_num ) as total,
+            sum((d.goods_num * g.unit_price * c.discount_rate) - (d.goods_num * g.cost_amount)) as net_profit
+        FROM t_order_detail d JOIN t_order o ON d.order_no = o.order_no
+             JOIN t_shop s ON s.id = o.shop_id JOIN t_goods g on g.id = d.goods_id JOIN t_discount c on c.id = o.discount_id
+        where 1 = 1
+        <if test="shopId != null  and shopId != ''"> and s.id = #{shopId}</if>
+        GROUP BY s.id,d.goods_id
     </select>
 </mapper>

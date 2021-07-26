@@ -54,7 +54,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['business:order:add']"
+          v-hasPermi="['com:manage:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -64,7 +64,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['business:order:edit']"
+          v-hasPermi="['com:manage:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -74,7 +74,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['business:order:remove']"
+          v-hasPermi="['com:manage:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -83,7 +83,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['business:order:export']"
+          v-hasPermi="['com:manage:export']"
         >导出</el-button>
       </el-col>
 	  <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -107,14 +107,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['business:order:edit']"
+            v-hasPermi="['com:manage:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['business:order:remove']"
+            v-hasPermi="['com:manage:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -153,7 +153,8 @@
         <br />
         <el-table v-loading="loading" :data="orderVo.details" class="details-class">
           <el-table-column label="商品" align="center" prop="goodsName" />
-          <el-table-column label="单价" align="center" prop="unitPrice" />
+          <el-table-column label="售价" align="center" prop="unitPrice" />
+          <el-table-column label="成本价" align="center" prop="costAmount" />
           <el-table-column label="数量(份数)" align="center" prop="goodsNum" />
           <el-table-column label="金额(元)" align="center" prop="amount" />
         </el-table>
@@ -161,9 +162,11 @@
            <tr>
              <td>
                <span style="width:30px;margin-left: 55px;">商品数量：{{this.orderVo.goodsNum}}</span>
-               <span style="width:30px;margin-left: 100px;">实际金额：{{this.orderVo.totalAmount}}元</span>
-               <span style="width:30px;margin-left: 100px;color: red;">实收金额：{{this.orderVo.paidInAmount}}元</span>
-                <span style="width:30px;margin-left: 100px;">以优惠：{{this.orderVo.preferentialAmouont}}元</span>
+               <span style="width:30px;margin-left: 20px;">实际金额：{{this.orderVo.totalAmount}}元</span>
+               <span style="width:30px;margin-left: 20px;">实收金额：{{this.orderVo.paidInAmount}}元</span>
+               <span style="width:30px;margin-left: 20px;color: red;">成本：{{this.orderVo.totalAmount - this.orderVo.preferentialAmouont - this.orderVo.netProfit}}元</span>
+               <span style="width:30px;margin-left: 20px; color: yellowgreen;">已优惠：{{this.orderVo.preferentialAmouont}}元</span>
+               <span style="width:30px;margin-left: 20px;color: green;">净利：{{this.orderVo.netProfit}}元</span>
              </td>
            </tr>
         </table>

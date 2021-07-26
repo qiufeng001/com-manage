@@ -1,6 +1,7 @@
 package com.manage.common.core.utils;
 
 import com.manage.common.core.constant.HttpStatus;
+import com.manage.common.core.core.domain.entity.SysUser;
 import com.manage.common.core.core.domain.model.LoginUser;
 import com.manage.common.core.exception.CustomException;
 import org.springframework.security.core.Authentication;
@@ -73,5 +74,14 @@ public class SecurityUtils {
      */
     public static boolean isAdmin(Long userId) {
         return userId != null && 1L == userId;
+    }
+
+    public static Long getShopId() {
+        LoginUser loginUser = (LoginUser) getAuthentication().getPrincipal();
+        SysUser sysUser = loginUser.getUser();
+        if(!SysUser.isAdmin(sysUser.getUserId())) {
+            return loginUser.getUser().getShopId();
+        }
+        return null;
     }
 }

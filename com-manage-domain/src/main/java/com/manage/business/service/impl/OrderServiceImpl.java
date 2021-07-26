@@ -8,6 +8,7 @@ import com.manage.business.mapper.OrderMapper;
 import com.manage.business.mapper.TDiscountMapper;
 import com.manage.business.mapper.TGoodsMapper;
 import com.manage.common.core.constant.ErrConstants;
+import com.manage.common.core.core.domain.entity.SysUser;
 import com.manage.common.core.core.service.impl.BaseServiceImpl;
 import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.StringUtils;
@@ -45,6 +46,23 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
     protected IMapper getMapper() {
         return mapper;
     }
+
+    /**
+     * 查询列表
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    @Transactional
+    public List<Order> selectList(Order entity) {
+        SysUser user = SecurityUtils.getLoginUser().getUser();
+        if(!SysUser.isAdmin(user.getUserId())) {
+            entity.setShopId(user.getShopId());
+        }
+        return getMapper().selectList(entity);
+    }
+
 
     /**
      * 新增
@@ -137,8 +155,11 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
         String orderNo = super.generateId();
         try {
             // 实际总额
-            Float total_amount = 0F;
+            Float totalAmount = 0F;
+            // 总商品数
             Integer total = 0;
+            // 总的成本价格
+            Float costAmount = 0F;
             for(OrderDetail detail : details) {
                 TGoods goods = goodsMap.get(detail.getGoodsId());
                 // 减库存
@@ -147,7 +168,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
                 goods.setTotal(goods.getTotal() + detail.getGoodsNum());
                 goodsMapper.update(goods);
                 // 实际金额汇总
-                total_amount += goods.getUnitPrice() * detail.getGoodsNum();
+                totalAmount += goods.getUnitPrice() * detail.getGoodsNum();
+                costAmount += goods.getCostAmount() * detail.getGoodsNum();
                 // 生成订单明细
                 detail.setOrderNo(orderNo);
                 total += detail.getGoodsNum();
@@ -159,13 +181,14 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements IO
             List<TDiscount> discounts = discountMapper.selectList(query);
             TDiscount discount = discounts.get(0);
             // 实收金额
-            Float paidAmount = total_amount * discount.getDiscountRate();
+            Float paidAmount = totalAmount * discount.getDiscountRate();
 
             entity.setOrderNo(orderNo);
             entity.setDiscountId(discount.getId());
             entity.setPayee(SecurityUtils.getUsername());
             entity.setPaidInAmount(paidAmount);
-            entity.setTotalAmount(total_amount);
+            entity.setTotalAmount(totalAmount);
+            entity.setCostAmount(costAmount);
             entity.setTotal(total);
             entity.setShopId(SecurityUtils.getLoginUser().getUser().getShopId());
             // 保存订单

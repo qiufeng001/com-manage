@@ -12,16 +12,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="supplierId"    column="supplier_id"    />
         <result property="supplierName"    column="supplier_name"    />
         <result property="unitPrice"    column="unit_price"    />
+        <result property="costAmount"    column="cost_amount"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectTGoodsVo">
-        select id, name, number, total, supplier_id, unit_price, create_by, create_time from t_goods
+        select id, name, number, total, supplier_id, unit_price, cost_amount, create_by, create_time from t_goods
     </sql>
 
     <select id="selectList" parameterType="TGoods" resultMap="TGoodsResult">
-        select t.id, t.name, t.number, t.total, t.supplier_id, s.name as  supplier_name, t.unit_price, t.create_by, t.create_time from t_goods t
+        select t.id, t.name, t.number, t.total, t.supplier_id, s.name as  supplier_name, t.unit_price, cost_amount, t.create_by, t.create_time from t_goods t
         LEFT JOIN t_supplier s on s.id = t.supplier_id
         <where>  
             <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
@@ -45,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="total != null">total,</if>
             <if test="supplierId != null">supplier_id,</if>
             <if test="unitPrice != null">unit_price,</if>
+            <if test="costAmount != null">cost_amount,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
          </trim>
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="total != null">#{total},</if>
             <if test="supplierId != null">#{supplierId},</if>
             <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="costAmount != null">#{costAmount},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
          </trim>
@@ -67,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="total != null">total = #{total},</if>
             <if test="supplierId != null">supplier_id = #{supplierId},</if>
             <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="costAmount != null">cost_amount = #{costAmount},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
         </trim>

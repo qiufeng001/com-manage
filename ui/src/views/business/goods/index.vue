@@ -72,7 +72,8 @@
     <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="商品名称" align="center" prop="name" />
-      <el-table-column label="单价" align="center" prop="unitPrice"/>
+      <el-table-column label="售价" align="center" prop="unitPrice"/>
+      <el-table-column label="成本" align="center" prop="costAmount" />
       <el-table-column label="库存" align="center" prop="number" />
       <el-table-column label="总量" align="center" prop="total" />
       <el-table-column label="供应商" align="center" prop="supplierName" />
@@ -123,8 +124,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="单价" prop="unitPrice">
+        <el-form-item label="售价" prop="unitPrice">
           <el-input v-model="form.unitPrice" placeholder="请输入单价" />
+        </el-form-item>
+        <el-form-item label="成本价" prop="costAmount">
+          <el-input v-model="form.costAmount" placeholder="请输入成本" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

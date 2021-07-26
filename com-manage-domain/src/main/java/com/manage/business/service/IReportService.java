@@ -13,4 +13,11 @@ public interface IReportService {
      * @return
      */
     Map<String, Object> getOrderReport(Map<String, Object> params);
+
+    /**
+     *
+     * @param params
+     * @return
+     */
+    Map<String, Object> salesReport(Map<String, Object> params);
 }

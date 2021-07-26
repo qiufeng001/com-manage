@@ -18,11 +18,18 @@ public class ReportController extends AbstractController {
     private IReportService reportService;
 
     /**
-     * 修改折扣
+     * 门店净利润
      */
-    @Log(title = "修改数据", businessType = BusinessType.UPDATE)
-    @PostMapping("orderReport")
-    public Map<String, Object> orderReport(@RequestBody Map<String, Object> params) {
+    @PostMapping("netProfitReport")
+    public Map<String, Object> netProfitReport(@RequestBody Map<String, Object> params) {
         return reportService.getOrderReport(params);
+    }
+
+    /**
+     * 利润和销量
+     */
+    @PostMapping("salesReport")
+    public Map<String, Object> salesReport(@RequestBody Map<String, Object> params) {
+        return reportService.salesReport(params);
     }
 }

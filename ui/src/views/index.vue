@@ -1,14 +1,11 @@
 <template>
   <div class="app-container home">
     <el-row :gutter="20">
-      <el-col :sm="24" :lg="12">
-        <div id="pieChart" :style="{width: '100%', height: '300px'}"></div>
+      <el-col :sm="24" :lg="8">
+        <div id="netProfitChart" :style="{width: '100%', height: '300px'}"></div>
       </el-col>
-      <el-col :sm="24" :lg="12">
-        <h4 class="text-danger" style="font-size: 14px">
-          Test Case:<br /><br />
-         // TODO 这里做报表
-        </h4>
+      <el-col :sm="24" :lg="16">
+       <div id="salesChart" :style="{width: '100%', height: '300px'}"></div>
       </el-col>
     </el-row>
     <el-divider />
@@ -72,52 +69,51 @@
 </template>
 <script>
 import * as $echarts from 'echarts';
-import { reportData } from "@/api/home";
+import { netProfitReport, salesReport  } from "@/api/report";
 
 
 export default {
   name: "index",
   data() {
     return {
-      orderReport: [],
-      pieData: []
+      orderReport: []
     };
   },
   mounted(){
-    this.pieReportData();
+    this.initNetProfitChart();
+    this.initSalesChart();
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
     // 获取订单报表
-    pieReportData() {
+    initNetProfitChart() {
       const params = {"reportType": "total", "timeType": "all"}
-      reportData(params).then(res => {
-        var orderReport = res.orderReport;
-        if(orderReport == null || orderReport == undefined) {
+      netProfitReport(params).then(res => {
+        var orderReports = res.orderReports;
+        if(orderReports == null || orderReports == undefined) {
           return;
         }
-        var data = new Array();
-        for(var i = 0;i < orderReport.length;i++) {
-            var dataItem = {};
-            dataItem.value = "实收" + orderReport[i].paidInAmount + "元, 实际总额" + orderReport[i].totalAmount + "元, 优惠" + orderReport[i].discountAmount + "元";
-            dataItem.name = orderReport[i].shopName;
-            data.push(dataItem);
-        }
-        this.pieReport(data);
+        this.netProfitReportChart(orderReports);
       });
     },
+    initSalesChart() {
+      const params = {"reportType": "total", "timeType": "all"}
+      salesReport(params).then(res => {
+        this.salesReportChart(res.names, res.saleReports, res.profitReports);
+      });
+
+    },
     // 饼图
-    pieReport(data){
-      console.log(data)
+    netProfitReportChart(result) {
       // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById('pieChart'))
+      let netProfitChart = this.$echarts.init(document.getElementById('netProfitChart'));
       // 绘制图表
       var option = {
         title: {
-            text: '店铺营收情况',
-            subtext: '店铺数据',
+            text: '净利润（门店）',
+            subtext: '净利润（元）',
             left: 'center'
         },
         tooltip: {
@@ -132,7 +128,7 @@ export default {
                 name: '店铺数据',
                 type: 'pie',
                 radius: '50%',
-                data: data,
+                data: result,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -143,7 +139,66 @@ export default {
             }
         ]
       };
-      myChart.setOption(option);
+      netProfitChart.setOption(option, true);
+    },
+    salesReportChart(names, sales, profit) {
+      var salesChart = this.$echarts.init(document.getElementById('salesChart'));
+      var option = {
+         tooltip: {
+              trigger: 'axis',
+              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+          },
+          yAxis: {
+              type: 'value'
+          },
+          xAxis: {
+              type: 'category',
+              data: names,
+              inverse: true,
+              animationDuration: 300,
+              animationDurationUpdate: 300,
+              alignWithLabel: true,
+              width: '20%',
+              max: (names.length - 1),
+              splitLine:{
+                lineStyle: {
+                   width: '30%',
+                   type: 'solid'
+                },
+                show:false
+              }
+          },
+          series: [{
+              realtimeSort: true,
+              name: '销量',
+              type: 'bar',
+              data: sales,
+              barWidth: '10%',
+              label: {
+                  show: true,
+                  position: 'top',
+                  valueAnimation: true
+              }
+          },{
+              realtimeSort: true,
+              name: '净利润(元)',
+              type: 'bar',
+              data: profit,
+              barWidth: '10%',
+              label: {
+                  show: true,
+                  position: 'right',
+                  valueAnimation: true
+              }
+          }],
+          legend: {
+              show: true
+          },
+          animationDuration: 0
+      };
+      salesChart.setOption(option);
     }
   }
 };
@@ -151,6 +206,7 @@ export default {
 
 <style scoped lang="scss">
 .home {
+  height: 40%;
   blockquote {
     padding: 10px 20px;
     margin: 0 0 20px;

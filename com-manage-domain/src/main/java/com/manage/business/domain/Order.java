@@ -68,6 +68,24 @@ public class Order extends BaseEntity {
     private String payee;
 
     /**
+     * 状态 1：有效订单 0：无效订单
+     */
+    @Excel(name = "订单状态")
+    private Integer status;
+
+
+    /**
+     * 成本价格
+     */
+    @Excel(name = "成本价")
+    private Float costAmount;
+
+    /**
+     * 净利润
+     */
+    private Float netProfit;
+
+    /**
      * 订单明细
      */
     private List<OrderDetail> details;
@@ -174,6 +192,30 @@ public class Order extends BaseEntity {
 
     public void setPreferentialAmouont(Float preferentialAmouont) {
         this.preferentialAmouont = preferentialAmouont;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Float getCostAmount() {
+        return costAmount;
+    }
+
+    public void setCostAmount(Float costAmount) {
+        this.costAmount = costAmount;
+    }
+
+    public Float getNetProfit() {
+        return netProfit;
+    }
+
+    public void setNetProfit(Float netProfit) {
+        this.netProfit = netProfit;
     }
 
     @Override
