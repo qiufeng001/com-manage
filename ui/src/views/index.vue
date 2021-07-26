@@ -10,44 +10,45 @@
     </el-row>
     <el-divider />
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="12" :lg="8">
+      <el-col :xs="24" :sm="24" :md="12" :lg="14">
         <el-card class="update-log">
           <div slot="header" class="clearfix">
-            <span>联系信息</span>
+            <span>门店销售情况</span>
           </div>
           <div class="body">
-            <p>
-              <i class="el-icon-user-solid"></i>
-            </p>
-            <p>
-              <i class="el-icon-chat-dot-round"></i> 微信：
-              <a href="javascript:;"></a>
-            </p>
-            <p>
-              <i class="el-icon-user-solid"></i> QQ：<a href="javascript:;">1055202292</a>
-            </p>
-            <!--<img
-              src="~@/assets/image/qqgroup.jpg"
-              alt="qqgroup"
-              width="100%"/>-->
+            <el-form :inline="true" label-width="68px" ref="shopReportQueryForm" :model="shopReportParams" >
+              <el-form-item label="门店">
+                <el-select v-model="shopReportParams.shopId" @change="handleShopReportQuery"
+                style="width: 170px;">
+                   <el-option
+                     v-for="item in shops"
+                     :key="item.id"
+                     :label="item.name"
+                     :value="item.id"
+                   ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="统计时间">
+                <el-select v-model="shopReportParams.dateType" @change="handleShopReportQuery"
+                  style="width: 30px;">
+                   <el-option :key="year" :value="year">年</el-option>
+                   <el-option :key="month" :value="month">月</el-option>
+                   <el-option :key="day" :value="day">日</el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button icon="el-icon-refresh" size="mini" @click="resetShopReportQuery">重置</el-button>
+              </el-form-item>
+            </el-form>
+           <el-table style="width: 100%" border :data="reportData">
+             <template v-for="(item, index) in tableHeader">
+               <el-table-column :prop="item.column_name" :label="item.column_comment" :key="index" v-if="item.column_name != 'id'"></el-table-column>
+             </template>
+           </el-table>
           </div>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="8">
-        <el-card class="update-log">
-          <div slot="header" class="clearfix">
-            <span>更新日志</span>
-          </div>
-          <el-collapse accordion>
-            <el-collapse-item title="v1.0.0 - 2020-12-16">
-              <ol>
-                <li>工作流分离版正式发布</li>
-              </ol>
-            </el-collapse-item>
-          </el-collapse>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="8">
+      <el-col :xs="24" :sm="24" :md="12" :lg="10">
         <el-card class="update-log">
           <div slot="header" class="clearfix">
             <span>捐赠支持</span>
@@ -76,7 +77,15 @@ export default {
   name: "index",
   data() {
     return {
-      orderReport: []
+      shopReportParams: {
+        pageNum: 1,
+        pageSize: 10,
+        shopId: null,
+        dateType: "月"
+      },
+      orderReport: [],
+      reportData: [],
+      reportHeader: []
     };
   },
   mounted(){
@@ -86,6 +95,14 @@ export default {
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
+    },
+    resetShopReportQuery() {
+        this.resetForm("shopReportQueryForm");
+        this.handleShopReportQuery();
+    },
+    // 门店报表数据获取
+    handleShopReportQuery() {
+
     },
     // 获取订单报表
     initNetProfitChart() {
@@ -125,7 +142,7 @@ export default {
         },
         series: [
             {
-                name: '店铺数据',
+                name: '净利',
                 type: 'pie',
                 radius: '50%',
                 data: result,

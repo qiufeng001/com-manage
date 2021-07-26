@@ -27,12 +27,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getSaleReport" parameterType="map" resultMap="OrderReportResult">
-        SELECT g.`name`, sum( d.goods_num ) as total,
+        SELECT * FROM (SELECT g.`name`, sum( d.goods_num ) as total,
             sum((d.goods_num * g.unit_price * c.discount_rate) - (d.goods_num * g.cost_amount)) as net_profit
         FROM t_order_detail d JOIN t_order o ON d.order_no = o.order_no
              JOIN t_shop s ON s.id = o.shop_id JOIN t_goods g on g.id = d.goods_id JOIN t_discount c on c.id = o.discount_id
         where 1 = 1
         <if test="shopId != null  and shopId != ''"> and s.id = #{shopId}</if>
-        GROUP BY s.id,d.goods_id
+        GROUP BY d.goods_id) p ORDER BY p.total desc
+    </select>
+
+    <select id="shopReportHeader" parameterType="map" resultMap="OrderReportResult">
+        SELECT g.`name`, sum( d.goods_num ) as total,
+        sum((d.goods_num * g.unit_price * c.discount_rate) - (d.goods_num * g.cost_amount)) as net_profit
+        FROM t_order_detail d JOIN t_order o ON d.order_no = o.order_no
+        JOIN t_shop s ON s.id = o.shop_id JOIN t_goods g on g.id = d.goods_id JOIN t_discount c on c.id = o.discount_id
+        where 1 = 1
+        <if test="shopId != null  and shopId != ''"> and s.id = #{shopId}</if>
+        GROUP BY d.goods_id
+    </select>
+
+    <select id="shopReport" parameterType="map" resultMap="OrderReportResult">
+        SELECT g.`name`, sum( d.goods_num ) as total,
+        sum((d.goods_num * g.unit_price * c.discount_rate) - (d.goods_num * g.cost_amount)) as net_profit
+        FROM t_order_detail d JOIN t_order o ON d.order_no = o.order_no
+        JOIN t_shop s ON s.id = o.shop_id JOIN t_goods g on g.id = d.goods_id JOIN t_discount c on c.id = o.discount_id
+        where 1 = 1
+        <if test="shopId != null  and shopId != ''"> and s.id = #{shopId}</if>
+        GROUP BY d.goods_id
     </select>
 </mapper>
