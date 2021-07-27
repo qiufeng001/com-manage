@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="name"    column="name"    />
         <result property="totalAmount"    column="total_amount"    />
         <result property="paidInAmount"    column="paid_in_amount"    />
+        <result property="costAmount"    column="cost_amount"    />
         <result property="discountAmount"    column="discount_amount"    />
         <result property="total"    column="total"    />
         <result property="netProfit"    column="net_profit"    />
@@ -46,13 +47,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         GROUP BY d.goods_id
     </select>
 
-    <select id="shopReport" parameterType="map" resultMap="OrderReportResult">
-        SELECT g.`name`, sum( d.goods_num ) as total,
-        sum((d.goods_num * g.unit_price * c.discount_rate) - (d.goods_num * g.cost_amount)) as net_profit
-        FROM t_order_detail d JOIN t_order o ON d.order_no = o.order_no
-        JOIN t_shop s ON s.id = o.shop_id JOIN t_goods g on g.id = d.goods_id JOIN t_discount c on c.id = o.discount_id
-        where 1 = 1
+    <select id="timeReportQuery" parameterType="map" resultMap="OrderReportResult">
+        SELECT
+            CASE
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '00' and '02' THEN '0-2(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '02' and '04' THEN '2-4(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '04' and '06' THEN '4-6(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '06' and '08' THEN '6-8(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '08' and '10' THEN '8-10(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '10' and '12' THEN '10-12(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '12' and '14' THEN '12-14(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '14' and '16' THEN '14-16(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '16' and '18' THEN '16-18(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '18' and '20' THEN '18-20(时)'
+                WHEN DATE_FORMAT(t.create_time, '%H') BETWEEN '20' and '22' THEN '20-22(时)'
+                ELSE  '22时-0点时'
+                END as name, sum(t.total_amount)  as total_amount,
+            sum(t.paid_in_amount) paid_in_amount,sum(t.cost_amount) cost_amount,
+            sum(t.paid_in_amount - t.cost_amount) net_profit,sum(t.total) total
+        FROM t_order t JOIN t_shop s on s.id = t.shop_id
         <if test="shopId != null  and shopId != ''"> and s.id = #{shopId}</if>
-        GROUP BY d.goods_id
+        GROUP BY name
     </select>
 </mapper>

@@ -18,6 +18,8 @@ public class OrderReportDto {
 
     private Integer total;
 
+    private Float costAmount;
+
     public String getShopName() {
         return shopName;
     }
@@ -72,5 +74,13 @@ public class OrderReportDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Float getCostAmount() {
+        return costAmount;
+    }
+
+    public void setCostAmount(Float costAmount) {
+        this.costAmount = costAmount;
     }
 }

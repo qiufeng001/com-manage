@@ -20,4 +20,6 @@ public interface ReportMapper {
     List<JSONObject> shopReportHeader(Map<String, Object> params);
 
     List<JSONObject> shopReport(Map<String, Object> params);
+
+    List<OrderReportDto> timeReportQuery(Map<String, Object> params);
 }

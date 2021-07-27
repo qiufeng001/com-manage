@@ -16,3 +16,18 @@ export function salesReport(query) {
     data: query
   })
 }
+
+export function searchData() {
+  return request({
+    url: '/business/report/queryParams',
+    method: 'post'
+  })
+}
+
+export function timeReportQuery(query) {
+  return request({
+    url: '/business/report/timeReportQuery',
+    method: 'post',
+    data: query
+  })
+}

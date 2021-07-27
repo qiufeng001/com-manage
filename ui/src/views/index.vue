@@ -13,38 +13,25 @@
       <el-col :xs="24" :sm="24" :md="12" :lg="14">
         <el-card class="update-log">
           <div slot="header" class="clearfix">
-            <span>门店销售情况</span>
+            <span>时段销售情况</span>
           </div>
           <div class="body">
-            <el-form :inline="true" label-width="68px" ref="shopReportQueryForm" :model="shopReportParams" >
+            <el-form :inline="true" label-width="68px" ref="timeReportQueryForm" :model="timeReportParams" >
               <el-form-item label="门店">
-                <el-select v-model="shopReportParams.shopId" @change="handleShopReportQuery"
-                style="width: 170px;">
+                <el-select v-model="timeReportParams.shopId" style="width: 170px;" @change="handleShopChange">
                    <el-option
                      v-for="item in shops"
                      :key="item.id"
-                     :label="item.name"
+                     :label="item.shopName"
                      :value="item.id"
                    ></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="统计时间">
-                <el-select v-model="shopReportParams.dateType" @change="handleShopReportQuery"
-                  style="width: 30px;">
-                   <el-option :key="year" :value="year">年</el-option>
-                   <el-option :key="month" :value="month">月</el-option>
-                   <el-option :key="day" :value="day">日</el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
                 <el-button icon="el-icon-refresh" size="mini" @click="resetShopReportQuery">重置</el-button>
               </el-form-item>
             </el-form>
-           <el-table style="width: 100%" border :data="reportData">
-             <template v-for="(item, index) in tableHeader">
-               <el-table-column :prop="item.column_name" :label="item.column_comment" :key="index" v-if="item.column_name != 'id'"></el-table-column>
-             </template>
-           </el-table>
+            <div id="timeChart" :style="{width: '100%', height: '400px'}"></div>
           </div>
         </el-card>
       </el-col>
@@ -70,39 +57,39 @@
 </template>
 <script>
 import * as $echarts from 'echarts';
-import { netProfitReport, salesReport  } from "@/api/report";
+import { netProfitReport, salesReport, timeReportQuery, searchData  } from "@/api/report";
 
 
 export default {
   name: "index",
   data() {
     return {
-      shopReportParams: {
-        pageNum: 1,
-        pageSize: 10,
-        shopId: null,
-        dateType: "月"
+      timeReportParams: {
+        shopId: null
       },
-      orderReport: [],
-      reportData: [],
-      reportHeader: []
+      shops: [],
+      timeReportDtos: []
     };
   },
   mounted(){
+    this.searchData();
     this.initNetProfitChart();
     this.initSalesChart();
+    this.initTimeChart();
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
-    resetShopReportQuery() {
-        this.resetForm("shopReportQueryForm");
-        this.handleShopReportQuery();
+    searchData() {
+      var params = {};
+       searchData(params).then(res => {
+          this.shops = res.shops;
+       });
     },
-    // 门店报表数据获取
-    handleShopReportQuery() {
-
+    resetShopReportQuery() {
+        this.timeReportParams.shopId = null;
+        this.handleShopChange();
     },
     // 获取订单报表
     initNetProfitChart() {
@@ -115,12 +102,23 @@ export default {
         this.netProfitReportChart(orderReports);
       });
     },
+    // 利润报表
     initSalesChart() {
       const params = {"reportType": "total", "timeType": "all"}
       salesReport(params).then(res => {
         this.salesReportChart(res.names, res.saleReports, res.profitReports);
       });
 
+    },
+    // 时间报表
+    initTimeChart() {
+      timeReportQuery(this.timeReportParams).then(res => {
+        this.timeReportDtos = res.timeReportDtos;
+        this.timeReportChart(res.names, res.trueAmountReports);
+      });
+    },
+    handleShopChange() {
+        this.initTimeChart();
     },
     // 饼图
     netProfitReportChart(result) {
@@ -161,6 +159,9 @@ export default {
     salesReportChart(names, sales, profit) {
       var salesChart = this.$echarts.init(document.getElementById('salesChart'));
       var option = {
+        grid:{
+          height:190
+        },
          tooltip: {
               trigger: 'axis',
               axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -216,6 +217,58 @@ export default {
           animationDuration: 0
       };
       salesChart.setOption(option);
+    },
+    timeReportChart(names, profit) {
+      var timeChart = this.$echarts.init(document.getElementById('timeChart'));
+      var option = {
+        grid:{
+          height:300
+        },
+        tooltip: {
+              trigger: 'axis',
+              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+          },
+          yAxis: {
+              type: 'value'
+          },
+          xAxis: {
+              type: 'category',
+              data: ["0-2", "2-4", "4-6", "6-8", "8-10", "10-12", "12-14", "14-16", "16-18", "18-20", "20-22", "22-00"],
+              inverse: true,
+              animationDuration: 300,
+              animationDurationUpdate: 300,
+              alignWithLabel: true,
+              width: '20%',
+              max: 11,
+              axisLine:{
+                lineStyle: {
+                   width: '30%',
+                   type: 'solid',
+                   color: "green"
+                },
+                show:true
+              }
+          },
+          series: [{
+              realtimeSort: true,
+              name: '销售额(元)',
+              type: 'bar',
+              data: profit,
+              barWidth: '10%',
+              label: {
+                  show: true,
+                  position: 'top',
+                  valueAnimation: true
+              }
+          }],
+          legend: {
+              show: true
+          },
+          animationDuration: 0
+      };
+      timeChart.setOption(option);
     }
   }
 };

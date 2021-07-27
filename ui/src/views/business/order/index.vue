@@ -170,6 +170,10 @@
            </tr>
         </table>
     </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="open" width="70%" append-to-body>
+      
+    </el-dialog>
   </div>
 </template>
 
