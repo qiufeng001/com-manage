@@ -30,7 +30,7 @@ public class SysLogininforController extends AbstractController {
     @GetMapping("/list")
     public TableDataInfo list(SysLogininfor logininfor) {
         startPage();
-        List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
+        List<SysLogininfor> list = logininforService.selectList(logininfor);
         return getDataTable(list);
     }
 
@@ -38,7 +38,7 @@ public class SysLogininforController extends AbstractController {
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
     @GetMapping("/export")
     public AjaxResult export(SysLogininfor logininfor) {
-        List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
+        List<SysLogininfor> list = logininforService.selectList(logininfor);
         ExcelUtil<SysLogininfor> util = new ExcelUtil<SysLogininfor>(SysLogininfor.class);
         return util.exportExcel(list, "登录日志");
     }
@@ -47,7 +47,7 @@ public class SysLogininforController extends AbstractController {
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds) {
-        return toAjax(logininforService.deleteLogininforByIds(infoIds));
+        return toAjax(logininforService.deleteByIds(infoIds));
     }
 
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")

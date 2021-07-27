@@ -25,8 +25,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @param logininfor 访问日志对象
      */
     @Override
-    public void insertLogininfor(SysLogininfor logininfor) {
-        logininforMapper.insertLogininfor(logininfor);
+    public void insert(SysLogininfor logininfor) {
+        logininforMapper.insert(logininfor);
     }
 
     /**
@@ -36,8 +36,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @return 登录记录集合
      */
     @Override
-    public List<SysLogininfor> selectLogininforList(SysLogininfor logininfor) {
-        return logininforMapper.selectLogininforList(logininfor);
+    public List<SysLogininfor> selectList(SysLogininfor logininfor) {
+        return logininforMapper.selectList(logininfor);
     }
 
     /**
@@ -47,8 +47,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @return
      */
     @Override
-    public int deleteLogininforByIds(Long[] infoIds) {
-        return logininforMapper.deleteLogininforByIds(infoIds);
+    public int deleteByIds(Long[] infoIds) {
+        return logininforMapper.deleteByIds(infoIds);
     }
 
     /**
