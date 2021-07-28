@@ -9,6 +9,7 @@ import com.manage.common.core.utils.StringUtils;
 import com.manage.domain.service.ITShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -16,7 +17,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Controller
 @ServerEndpoint("/p/cs/wsServer")
 public class WebSocketServer {
 

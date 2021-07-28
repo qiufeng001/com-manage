@@ -12,7 +12,7 @@ import store from './store'
 import router from './router'
 import permission from './directive/permission'
 import echarts from "echarts";
-
+import socket from "@/utils/webSocket";
 
 import './assets/icons' // icon
 import './permission' // permission control
@@ -37,6 +37,7 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.$echarts = echarts;
+Vue.prototype.startWebSocket  = socket.startWebSocket;
 
 Vue.prototype.msgSuccess = function (msg) {
   this.$message({ showClose: true, message: msg, type: "success" });
