@@ -1,15 +1,14 @@
-package com.manage.web.controller.server;
+package com.manage.web.server;
 
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.manage.common.core.utils.SecurityUtils;
-import com.manage.common.core.utils.StringUtils;
 import com.manage.domain.service.ITShopService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -17,14 +16,14 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Controller
-@ServerEndpoint("/p/cs/wsServer")
-public class WebSocketServer {
+@Component
+@ServerEndpoint(value = "/ws/server")
+public class WebsocketServer {
 
     @Autowired
-    private static ITShopService shopService;
+    private ITShopService shopService;
 
-    static Log log = LogFactory.getLog(WebSocketServer.class);
+    static Log log = LogFactory.getLog(WebsocketServer.class);
 
     /**
      * 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
@@ -34,7 +33,7 @@ public class WebSocketServer {
     /**
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
      */
-    private static ConcurrentHashMap<Long, WebSocketServer> webSocketMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Long, WebsocketServer> webSocketMap = new ConcurrentHashMap<>();
 
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -130,6 +129,8 @@ public class WebSocketServer {
 
     /**
      * 实现服务器主动推送
+     * session.getBasicRemote().sendText(message):同步发送信息
+     * session.getAsyncRemote().sendText(message):异步发送信息
      */
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
@@ -138,7 +139,7 @@ public class WebSocketServer {
     /**
      * 发送自定义消息
      */
-    public static void sendInfo(String message, @PathParam("shopId") Long shopId) throws IOException {
+    public void sendInfo(String message, @PathParam("shopId") Long shopId) throws IOException {
         String shopName = shopService.selectById(shopId).getShopName();
         log.info("发送消息到:" + shopName + "，报文:" + message);
         if (shopId != null && webSocketMap.containsKey(shopId)) {
@@ -153,10 +154,10 @@ public class WebSocketServer {
     }
 
     public static synchronized void addOnlineCount() {
-        WebSocketServer.onlineCount++;
+        WebsocketServer.onlineCount++;
     }
 
     public static synchronized void subOnlineCount() {
-        WebSocketServer.onlineCount--;
+        WebsocketServer.onlineCount--;
     }
 }

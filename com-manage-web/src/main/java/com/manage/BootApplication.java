@@ -3,6 +3,7 @@ package com.manage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 /**
  * 启动程序
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
         DataSourceAutoConfiguration.class,
         org.activiti.spring.boot.SecurityAutoConfiguration.class,
 })
+@EnableWebSocket
 public class BootApplication {
     public static void main(String[] args) {
         // System.setProperty("spring.devtools.restart.enabled", "false");

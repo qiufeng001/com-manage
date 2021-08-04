@@ -1,8 +1,10 @@
 package com.manage.web.controller.business;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.manage.business.domain.TDiscount;
+import com.manage.web.server.*;
 import com.manage.business.domain.TGoods;
 import com.manage.business.service.ITDiscountService;
 import com.manage.business.service.ITGoodsService;
@@ -37,6 +39,8 @@ public class OrderController extends BaseController<Order, Long> {
     private ITDiscountService discountService;
     @Autowired
     private ITGoodsService goodsService;
+    @Autowired
+    private WebsocketServer webSocketServer;
 
     @Override
     protected IService getService() {
@@ -83,8 +87,19 @@ public class OrderController extends BaseController<Order, Long> {
         return AjaxResult.success(result);
     }
 
+    /**
+     * 查看订单明细
+     * @param entity
+     * @return
+     */
     @PostMapping("/getDetails")
     public AjaxResult getDetails(@RequestBody Order entity) {
+        try{
+            webSocketServer.sendMessage("测试一下");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return AjaxResult.success(service.getDetails(entity));
     }
 }

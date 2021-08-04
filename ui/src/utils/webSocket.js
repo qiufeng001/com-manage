@@ -5,7 +5,7 @@ let count = 0;// 记录计数
 let lockReconnect = false;//避免ws重复连接
 const text1 = "您有新的订单，请及时处理！";
 let ws = null;// 判断当前浏览器是否支持WebSocket
-const server = `ws://localhost:8888/p/cs/wsServer`;// WebSocket服务地址
+const server = `ws://localhost:81/ws/server`;// WebSocket服务地址
 // 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 window.onbeforeunload = function () {
   ws.close();
@@ -23,16 +23,18 @@ let reconnect = (server) => {
 };
 // 创建实例websocket
 let createWebSocket = (server) => {
+  var headers = {};
+  headers['Authorization'] = 'Bearer ' + getToken();
   try {
     if('WebSocket' in window){
-      ws = new WebSocket(server)
+      ws = new WebSocket(server);
     }else if('MozWebSocket' in window){
-      ws = new MozWebSocket(server)
+      ws = new MozWebSocket(server);
     } else  {
       Notification({message:"当前浏览器不支持websocket协议,建议使用现代浏览器",type:"success"})
     }
     // 连接建立时触发
-    initEventHandle()
+    initEventHandle();
   } catch (e) {
     console.log("ERR-----------捕获异常", e)
   }
@@ -41,15 +43,19 @@ let createWebSocket = (server) => {
 let initEventHandle = () => {
   // 连接报错
   ws.onerror = function (evt, e) {
+
+    console.log("链接失败。。。，" + e);
     reconnect(server)
   };
   // 连接关闭
   ws.onclose = function (evt) {
+    console.log(evt);
     console.log("连接关闭---" + new Date().toLocaleTimeString());
     reconnect(server)
   };
   // 链接成功
   ws.onopen = function (evt) {
+    console.log("链接成功。。。")
     heartCheck.reset().start();// 心跳检测重置
     count = 0;// 重置重连次数
   };

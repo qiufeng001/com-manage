@@ -16,6 +16,7 @@
         <module>com-manage-quartz</module>
         <module>com-manage-domain</module>
         <module>com-manage-web</module>
+        <module>com-manage-wechat</module>
     </modules>
 
 
