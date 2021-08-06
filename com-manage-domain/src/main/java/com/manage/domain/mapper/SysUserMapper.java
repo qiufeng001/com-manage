@@ -110,4 +110,6 @@ public interface SysUserMapper {
     public SysUser checkEmailUnique(String email);
 
     List<SysUser> selectUserListByRoleKey(String roleKey);
+
+    public List<SysUser> seletctByParams(SysUser user);
 }

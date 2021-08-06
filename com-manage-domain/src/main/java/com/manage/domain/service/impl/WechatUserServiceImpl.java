@@ -1,22 +1,19 @@
 package com.manage.domain.service.impl;
 import com.manage.common.core.annotation.DataScope;
-import com.manage.common.core.constant.UserConstants;
-import com.manage.common.core.core.domain.entity.SysRole;
+import com.manage.common.core.core.domain.entity.SysUser;
 import com.manage.common.core.core.domain.entity.WechatRole;
 import com.manage.common.core.core.domain.entity.WechatUser;
-import com.manage.common.core.exception.CustomException;
-import com.manage.common.core.utils.SecurityUtils;
 import com.manage.common.core.utils.StringUtils;
-import com.manage.domain.domain.SysPost;
 import com.manage.domain.mapper.*;
 import com.manage.domain.service.ISysConfigService;
-import com.manage.domain.service.IWechatRoleService;
+import com.manage.domain.service.ISysUserService;
 import com.manage.domain.service.IWechatUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,9 @@ public class WechatUserServiceImpl implements IWechatUserService {
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private ISysUserService sysUserService;
+
     /**
      * 根据条件分页查询用户列表
      *
@@ -50,7 +50,7 @@ public class WechatUserServiceImpl implements IWechatUserService {
      */
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
-    public List<WechatRole> selectUserList(WechatRole user) {
+    public List<WechatUser> selectUserList(WechatUser user) {
         return userMapper.selectUserList(user);
     }
 
@@ -61,7 +61,7 @@ public class WechatUserServiceImpl implements IWechatUserService {
      * @return 用户对象信息
      */
     @Override
-    public WechatRole selectUserByUserName(String userName) {
+    public WechatUser selectUserByUserName(String userName) {
         return userMapper.selectUserByUserName(userName);
     }
 
@@ -72,89 +72,8 @@ public class WechatUserServiceImpl implements IWechatUserService {
      * @return 用户对象信息
      */
     @Override
-    public WechatRole selectUserById(Long userId) {
+    public WechatUser selectUserById(Long userId) {
         return userMapper.selectUserById(userId);
-    }
-
-    /**
-     * 查询用户所属角色组
-     *
-     * @param userName 用户名
-     * @return 结果
-     */
-    @Override
-    public String selectUserRoleGroup(String userName) {
-        List<WechatRole> list = roleMapper.selectRolesByUserName(userName);
-        StringBuffer idsStr = new StringBuffer();
-        for (WechatRole role : list) {
-            idsStr.append(role.getRoleName()).append(",");
-        }
-        if (StringUtils.isNotEmpty(idsStr.toString())) {
-            return idsStr.substring(0, idsStr.length() - 1);
-        }
-        return idsStr.toString();
-    }
-
-    /**
-     * 校验用户名称是否唯一
-     *
-     * @param userName 用户名称
-     * @return 结果
-     */
-    @Override
-    public String checkUserNameUnique(String userName) {
-        int count = userMapper.checkUserNameUnique(userName);
-        if (count > 0) {
-            return UserConstants.NOT_UNIQUE;
-        }
-        return UserConstants.UNIQUE;
-    }
-
-    /**
-     * 校验用户名称是否唯一
-     *
-     * @param user 用户信息
-     * @return
-     */
-    @Override
-    public String checkPhoneUnique(WechatRole user) {
-        Long userId = StringUtils.isNull(user.getId()) ? -1L : user.getId();
-        WechatRole info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue()) {
-            return UserConstants.NOT_UNIQUE;
-        }
-        return UserConstants.UNIQUE;
-    }
-
-    /**
-     * 校验email是否唯一
-     *
-     * @param user 用户信息
-     * @return
-     */
-    @Override
-    public String checkEmailUnique(WechatRole user) {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-        WechatRole info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue()) {
-            return UserConstants.NOT_UNIQUE;
-        }
-        return UserConstants.UNIQUE;
-    }
-
-    /**
-     * 校验用户是否允许操作
-     *
-     * @param user 用户信息
-     */
-    @Override
-    public void checkUserAllowed(WechatRole user) {
-        if(user.isAdmin()) {
-            return;
-        }
-        if (StringUtils.isNotNull(user.getUserId()) && user.isAdmin()) {
-            throw new CustomException("不允许操作超级管理员用户");
-        }
     }
 
     /**
@@ -165,86 +84,24 @@ public class WechatUserServiceImpl implements IWechatUserService {
      */
     @Override
     @Transactional
-    public int insertUser(WechatRole user) {
-        // 新增用户信息
-        int rows = userMapper.insertUser(user);
-        // 新增用户与角色管理
-        insertUserRole(user);
+    public int saveOrUpdateUser(WechatUser user) {
+        int rows = 0;
+        if(user.getId() != null) {
+            // 新增用户信息
+            rows = userMapper.insertUser(user);
+            /// 默认普通用户是管理员权限：1，顾客权限 id:2,普通员工权限：3
+            // 根据电话号码查询设置权限
+            SysUser sysUser = new SysUser();
+            sysUser.setPhonenumber(user.getPhoneNum());
+            List<SysUser> sysUsers = sysUserService.seletctByParams(sysUser);
+            if(CollectionUtils.isEmpty(sysUsers)) {
+
+            }
+            insertUserRole(user);
+        }else {
+            return userMapper.updateUser(user);
+        }
         return rows;
-    }
-
-    /**
-     * 修改保存用户信息
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int updateUser(WechatRole user) {
-        Long userId = user.getUserId();
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRoleByUserId(userId);
-        // 新增用户与角色管理
-        insertUserRole(user);
-        return userMapper.updateUser(user);
-    }
-
-    /**
-     * 修改用户状态
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
-    @Override
-    public int updateUserStatus(WechatRole user) {
-        return userMapper.updateUser(user);
-    }
-
-    /**
-     * 修改用户基本信息
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
-    @Override
-    public int updateUserProfile(WechatRole user) {
-        return userMapper.updateUser(user);
-    }
-
-    /**
-     * 修改用户头像
-     *
-     * @param userName 用户名
-     * @param avatar   头像地址
-     * @return 结果
-     */
-    @Override
-    public boolean updateUserAvatar(String userName, String avatar) {
-        return userMapper.updateUserAvatar(userName, avatar) > 0;
-    }
-
-    /**
-     * 重置用户密码
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
-    @Override
-    public int resetPwd(WechatRole user) {
-        return userMapper.updateUser(user);
-    }
-
-    /**
-     * 重置用户密码
-     *
-     * @param userName 用户名
-     * @param password 密码
-     * @return 结果
-     */
-    @Override
-    public int resetUserPwd(String userName, String password) {
-        return userMapper.resetUserPwd(userName, password);
     }
 
     /**
@@ -269,34 +126,4 @@ public class WechatUserServiceImpl implements IWechatUserService {
         }
     }
 
-    /**
-     * 通过用户ID删除用户
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int deleteUserById(Long userId) {
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRoleByUserId(userId);
-        return userMapper.deleteUserById(userId);
-    }
-
-    /**
-     * 批量删除用户信息
-     *
-     * @param userIds 需要删除的用户ID
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int deleteUserByIds(Long[] userIds) {
-        for (Long userId : userIds) {
-            checkUserAllowed(new WechatRole(userId));
-        }
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRole(userIds);
-        return userMapper.deleteUserByIds(userIds);
-    }
 }

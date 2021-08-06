@@ -165,4 +165,10 @@ public interface ISysUserService {
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 根据电话号码查询角色等信息
+     *
+     */
+    public List<SysUser> seletctByParams(SysUser user);
 }

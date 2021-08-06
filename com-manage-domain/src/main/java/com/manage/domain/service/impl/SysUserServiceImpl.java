@@ -409,4 +409,9 @@ public class SysUserServiceImpl implements ISysUserService {
         }
         return successMsg.toString();
     }
+
+    @Override
+    public List<SysUser> seletctByParams(SysUser user) {
+        return userMapper.seletctByParams(user);
+    }
 }
